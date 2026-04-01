@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -479,7 +478,7 @@
       <div class="stat-label">Loan volume — last 24 months</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val green">12–18%</div>
+      <div class="stat-val green">10–15%</div>
       <div class="stat-label">Broker commission of annual premium</div>
     </div>
     <div class="stat-card">
@@ -521,17 +520,19 @@
     <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">RBI lends on investment properties — fix-and-flip projects, DSCR rentals, bridge loans, and new construction. These are <em>not</em> standard homeowner's policies. They are specialty lines that most retail agents cannot write and most online comparison platforms don't serve. This is important: the brokerage is not competing with State Farm. It is operating in the surplus lines and specialty property market where broker relationships and expertise matter more than advertising budgets.</p>
     <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">Critically — based on RBI's publicly listed recent deals, the average loan size appears to be well over $1M, not the $200K originally assumed. Recent funded deals on their website range from approximately $1M to $4.5M+, with bridge loans, new construction, and fix-and-flip projects concentrated in South Florida, Texas, and other high-value markets. At these loan sizes, the insured property values — and therefore the insurance premiums and commissions — are materially larger than a typical residential investment property. The premium estimates below reflect this reality.</p>
 
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">Based on RBI's publicly listed recent deals, loan sizes range from approximately $1M to $4.5M+, concentrated in bridge, new construction, and fix-and-flip. The insurance math at these values is significant: annual premiums typically run 1.5–2% of the insured value, and broker commissions are 10–15% of that premium. A single $2M bridge loan generates an annual premium of $30,000–$40,000 and a commission of $3,000–$6,000 — per policy, recurring every year on renewal.</p>
+
     <table class="data-table">
-      <thead><tr><th>Loan Type</th><th>Required Insurance</th><th>Why It's Specialty</th><th>Est. Annual Premium *</th></tr></thead>
+      <thead><tr><th>Loan Type</th><th>Required Insurance</th><th>Why It's Specialty</th><th>Est. Annual Premium *</th><th>Est. Commission</th></tr></thead>
       <tbody>
-        <tr><td>Fix &amp; Flip (vacant, under reno)</td><td>Builder's Risk / Vacant Dwelling</td><td>Standard policies explicitly exclude vacant or under-renovation properties</td><td>$8,000 – $20,000</td></tr>
-        <tr><td>DSCR / Rental Property</td><td>Dwelling Fire DP-3</td><td>Non-owner-occupied; homeowner policies exclude rentals entirely</td><td>$6,000 – $15,000</td></tr>
-        <tr><td>Bridge Loan</td><td>Landlord / Dwelling Fire</td><td>Lender requires named insured + loss payee; occupancy type complicates standard coverage</td><td>$7,000 – $18,000</td></tr>
-        <tr><td>New Construction</td><td>Builder's Risk (Course of Construction)</td><td>Property doesn't exist yet — only specialty carriers write this</td><td>$10,000 – $30,000+</td></tr>
-        <tr><td>Flood Zone Properties</td><td>Private Flood (add-on)</td><td>Required in FEMA flood zones; NFIP or private market; separate policy</td><td>$2,500 – $6,000</td></tr>
+        <tr><td>Fix &amp; Flip (vacant, under reno)</td><td>Builder's Risk / Vacant Dwelling</td><td>Standard policies explicitly exclude vacant or under-renovation properties</td><td>$15,000 – $30,000</td><td>$1,500 – $4,500</td></tr>
+        <tr><td>DSCR / Rental Property</td><td>Dwelling Fire DP-3</td><td>Non-owner-occupied; homeowner policies exclude rentals entirely</td><td>$12,000 – $25,000</td><td>$1,200 – $3,750</td></tr>
+        <tr><td>Bridge Loan</td><td>Landlord / Dwelling Fire</td><td>Lender requires named insured + loss payee; occupancy complicates standard coverage</td><td>$15,000 – $40,000</td><td>$1,500 – $6,000</td></tr>
+        <tr><td>New Construction</td><td>Builder's Risk (Course of Construction)</td><td>Property doesn't exist yet — only specialty carriers write this</td><td>$20,000 – $60,000+</td><td>$2,000 – $9,000+</td></tr>
+        <tr><td>Flood Zone Properties</td><td>Private Flood (add-on)</td><td>Required in FEMA flood zones; NFIP or private market; separate policy</td><td>$3,000 – $8,000</td><td>$300 – $1,200</td></tr>
       </tbody>
     </table>
-    <p style="color:var(--muted);font-size:12px;margin-bottom:24px;font-style:italic;">* Premium estimates are based on RBI's publicly showcased recent deals ($1M–$4.5M+) and standard industry pricing formulas (builder's risk = 1–4% of project value). These are illustrative ranges only — actual premiums vary significantly by property value, location, condition, occupancy, and carrier. RBI's website highlights their largest deals; the average across the full loan portfolio may differ materially. All estimates are subject to confirmation of actual average loan size, loan type mix, and geographic distribution. Do not use these figures for financial projections until verified with RBI management.</p>
+    <p style="color:var(--muted);font-size:12px;margin-bottom:24px;font-style:italic;">* Premium = 1.5–2% of insured value (industry standard). Commission = 10–15% of premium. Based on RBI's recent funded deals ($1M–$4.5M+). RBI's website highlights larger deals — full portfolio average may differ. All figures illustrative until average loan size and loan mix are confirmed.</p>
 
     <h2 class="sec">Why Geography Matters for Revenue</h2>
     <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">Property insurance premiums vary significantly by state. High-risk markets — coastal states, catastrophe-prone regions — produce premiums 2–3x higher than the national average of approximately $2,181 for a standard residential policy. For investment properties specifically, premiums run an additional 15–25% above owner-occupied rates. This matters because broker commissions are a percentage of premium — a higher-premium state generates more revenue per policy placed, for the exact same amount of work. Until RBI's state-by-state loan volume is confirmed, this remains an assumption. The geographic mix will be one of the most important inputs to the financial model.</p>
@@ -565,15 +566,15 @@
     <table class="data-table">
       <thead><tr><th>Revenue Stream</th><th>How It Works</th><th>Rate</th><th>Timing</th></tr></thead>
       <tbody>
-        <tr><td>New Policy Commission</td><td>Carrier pays brokerage at policy binding; built into carrier's pricing — borrower does not pay more</td><td>12–15%</td><td>Upfront, at closing</td></tr>
-        <tr><td>Renewal Commission</td><td>Paid automatically when policy renews each year — no additional work required</td><td>8–12%</td><td>Annually, passively</td></tr>
-        <tr><td>Flood Insurance Commission</td><td>Separate policy for flood zone properties; NFIP or private market</td><td>8–12%</td><td>Upfront + annual renewal</td></tr>
+        <tr><td>New Policy Commission</td><td>Carrier pays brokerage at policy binding; built into carrier's pricing — borrower does not pay more</td><td>10–15%</td><td>Upfront, at closing</td></tr>
+        <tr><td>Renewal Commission</td><td>Paid automatically when policy renews each year — no additional work required</td><td>10–12%</td><td>Annually, passively</td></tr>
+        <tr><td>Flood Insurance Commission</td><td>Separate policy for flood zone properties; NFIP or private market</td><td>10–12%</td><td>Upfront + annual renewal</td></tr>
         <tr><td>Contingent / Override Commission</td><td>Annual volume bonus from carriers once placed premium exceeds thresholds (~$500K–$1M)</td><td>1–6%</td><td>Annually, at threshold</td></tr>
       </tbody>
     </table>
 
     <div class="callout">
-      <strong>The renewal compounding effect:</strong> Every policy placed this year pays a commission again next year — automatically, without any additional sales activity. Based on RBI's recent deal sizes, average annual premiums on their loan types likely range from $8,000–$20,000+. A brokerage with 500 active policies collecting 10% renewal commissions on a $12,000 average annual premium generates $600,000/year in passive income before writing a single new policy. This is why the economics improve dramatically over time — and why average loan size is one of the most important inputs to confirm.
+      <strong>How premiums are calculated:</strong> Property insurance premiums on commercial and investment property are typically priced at <strong style="color:var(--text);">1.5–2% of the insured value</strong> (the sum asegurada). On a $1M property that's $15,000–$20,000 in annual premium. At 10–15% commission, that's <strong style="color:var(--text);">$1,500–$3,000 per policy</strong> — and that same commission recurs every year on renewal without any additional work. Based on RBI's publicly listed recent deals ranging from $1M to $4.5M+, the per-policy commission on a typical RBI loan is likely in the <strong style="color:var(--text);">$1,500–$10,000+ range</strong> depending on loan size. Average loan size is the most important input to confirm.
     </div>
 
     <h2 class="sec">How the Money Actually Flows</h2>
@@ -634,7 +635,7 @@
         <div class="chain-arrow">→</div>
         <div class="chain-node highlight">
           <div class="cn-label">RBI Brokerage</div>
-          <div class="cn-sub earn">Earns 10–12%</div>
+          <div class="cn-sub earn">Earns 8–12% net</div>
         </div>
         <div class="chain-arrow">→</div>
         <div class="chain-node">
@@ -672,7 +673,7 @@
         <div class="chain-arrow">→</div>
         <div class="chain-node highlight">
           <div class="cn-label">RBI Brokerage</div>
-          <div class="cn-sub earn">Earns 12–15%</div>
+          <div class="cn-sub earn">Earns 10–15%</div>
         </div>
         <div class="chain-arrow">→</div>
         <div class="chain-node" style="flex:2;">
