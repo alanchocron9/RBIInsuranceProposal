@@ -578,40 +578,21 @@
     </div>
 
     <h2 class="sec">How the Money Actually Flows</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.75;">Understanding where RBI sits in the distribution chain matters — because it determines both the commission rate and what it takes to improve it over time.</p>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.75;">Understanding where RBI sits in the distribution chain matters — because it shows exactly where the commission comes from and why the borrower never pays more.</p>
 
     <style>
       .chain-wrap { margin-bottom: 8px; }
-      .chain-section-label { margin-bottom: 6px; }
-      .chain-section-label .cs-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--text); }
-      .chain-section-label .cs-sub { font-size:12px; color:var(--muted); margin-top:2px; }
       .chain-row { display:flex; align-items:center; gap:0; margin:12px 0 4px; }
-      .chain-node {
-        flex:1; background:var(--surface2); border:1px solid var(--border);
-        border-radius:10px; padding:10px 8px; text-align:center;
-        position:relative;
-      }
+      .chain-node { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center; }
       .chain-node.highlight { border-color:var(--accent); background:rgba(59,123,255,0.08); }
       .chain-node .cn-label { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--text); margin-bottom:3px; }
       .chain-node .cn-sub { font-size:11px; color:var(--muted); }
       .chain-node .cn-sub.earn { color:var(--green); font-weight:600; }
-      .chain-arrow {
-        width:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
-        color:var(--muted); font-size:16px; padding:0 2px;
-      }
-      .commission-row {
-        display:flex; align-items:center; justify-content:center;
-        gap:8px; margin:8px 0 4px; padding:8px 12px;
-        background:rgba(245,197,66,0.07); border:1px solid rgba(245,197,66,0.2);
-        border-radius:8px; font-size:12px; color:var(--gold);
-      }
+      .chain-arrow { width:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:16px; padding:0 2px; }
+      .commission-row { display:flex; align-items:center; justify-content:center; gap:8px; margin:8px 0 4px; padding:8px 12px; background:rgba(245,197,66,0.07); border:1px solid rgba(245,197,66,0.2); border-radius:8px; font-size:12px; color:var(--gold); }
       .commission-row .arr { font-size:14px; }
-      .chain-divider { height:1px; background:var(--border); margin:24px 0; border:none; }
       .chain-bottom { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:16px; }
-      .chain-bottom-card {
-        background:var(--surface2); border:1px solid var(--border);
-        border-radius:10px; padding:12px 14px; text-align:center;
-      }
+      .chain-bottom-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center; }
       .chain-bottom-card .cb-label { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--text); margin-bottom:4px; }
       .chain-bottom-card .cb-sub { font-size:11px; color:var(--muted); }
       .chain-bottom-card.blue { border-color:var(--accent); }
@@ -621,12 +602,6 @@
     </style>
 
     <div class="chain-wrap">
-
-      <!-- PATH A -->
-      <div class="chain-section-label">
-        <div class="cs-title">Path A — Specialty &amp; surplus lines <span style="color:var(--muted);font-weight:400;">(Year 1)</span></div>
-        <div class="cs-sub">Fix &amp; flip, vacant, hard-to-place risks — requires wholesale access</div>
-      </div>
       <div class="chain-row">
         <div class="chain-node">
           <div class="cn-label">Borrower</div>
@@ -635,12 +610,12 @@
         <div class="chain-arrow">→</div>
         <div class="chain-node highlight">
           <div class="cn-label">RBI Brokerage</div>
-          <div class="cn-sub earn">Earns 8–12% net</div>
+          <div class="cn-sub earn">Earns 10–15%</div>
         </div>
         <div class="chain-arrow">→</div>
         <div class="chain-node">
-          <div class="cn-label">Burns &amp; Wilcox</div>
-          <div class="cn-sub">Takes 3–5% spread</div>
+          <div class="cn-label">Wholesale Broker</div>
+          <div class="cn-sub">Market access (Burns &amp; Wilcox)</div>
         </div>
         <div class="chain-arrow">→</div>
         <div class="chain-node">
@@ -655,60 +630,22 @@
       </div>
       <div class="commission-row">
         <span class="arr">←</span>
-        <span>Carrier funds all commissions — borrower never pays more because of the chain</span>
+        <span>Carrier funds all commissions — borrower never pays more because a broker is involved</span>
       </div>
-
-      <hr class="chain-divider">
-
-      <!-- PATH B -->
-      <div class="chain-section-label">
-        <div class="cs-title">Path B — Direct carrier <span style="color:var(--muted);font-weight:400;">(Year 2+)</span></div>
-        <div class="cs-sub">Standard rental, DSCR, flood — direct appointments once volume is established</div>
-      </div>
-      <div class="chain-row">
-        <div class="chain-node">
-          <div class="cn-label">Borrower</div>
-          <div class="cn-sub">Pays 100% premium</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node highlight">
-          <div class="cn-label">RBI Brokerage</div>
-          <div class="cn-sub earn">Earns 10–15%</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node" style="flex:2;">
-          <div class="cn-label">Carrier</div>
-          <div class="cn-sub">Foremost, American Modern, Neptune — direct</div>
-        </div>
-      </div>
-      <div class="commission-row">
-        <span class="arr">←</span>
-        <span>Full commission flows directly — no wholesale spread, better economics for RBI</span>
-      </div>
-
-      <hr class="chain-divider">
-
-      <!-- WHAT NEVER CHANGES -->
-      <div class="cs-title" style="margin-bottom:12px;">What never changes</div>
-      <div class="chain-bottom">
+      <div class="chain-bottom" style="margin-top:16px;">
         <div class="chain-bottom-card green">
-          <div class="cb-label">Borrower experience</div>
-          <div class="cb-sub">Identical either way — same quote, same policy, same price</div>
+          <div class="cb-label">Borrower pays same</div>
+          <div class="cb-sub">Commission is built into carrier pricing — not added on top</div>
         </div>
         <div class="chain-bottom-card blue">
-          <div class="cb-label">RBI earns either way</div>
-          <div class="cb-sub">Path B just earns more once the volume track record is built</div>
+          <div class="cb-label">RBI earns 10–15%</div>
+          <div class="cb-sub">Of annual premium — upfront at binding, then again every renewal</div>
         </div>
         <div class="chain-bottom-card purple">
-          <div class="cb-label">Carrier always pays</div>
-          <div class="cb-sub">Commission is never charged to the borrower — it's built into carrier pricing</div>
+          <div class="cb-label">Zero risk to RBI</div>
+          <div class="cb-sub">Carrier holds all underwriting risk — RBI is purely a distributor</div>
         </div>
       </div>
-
-    </div>
-
-    <div class="callout">
-      <strong>Path A to Path B doesn't require a new license.</strong> The 2-20 license covers both from day one. What changes is the carrier appointment — a direct contract that carriers grant once a brokerage has proven volume, typically $500K–$1M in annual placed premium. That's why Path A comes first: Burns &amp; Wilcox provides immediate market access while the track record is being built. Some carriers (Neptune Flood, Foremost) will appoint new agencies directly with low or no volume minimums — those can be Path B from the start. The hard specialty markets follow once the volume is there.
     </div>
 
     <h2 class="sec">Pipeline Integration — The 5-Step Workflow</h2>
