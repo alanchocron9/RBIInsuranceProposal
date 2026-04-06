@@ -3,1159 +3,602 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RBI Insurance Brokerage — Opportunity Assessment</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<title>RBI License Control</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:        #080C14;
-    --surface:   #0E1420;
-    --surface2:  #141B2B;
-    --border:    #1E2A40;
-    --accent:    #3B7BFF;
-    --accent2:   #00D4FF;
-    --gold:      #F5C542;
-    --green:     #22C87A;
-    --red:       #FF4C4C;
-    --orange:    #FF8C42;
-    --text:      #E8EDF5;
-    --muted:     #6B7A99;
-    --subtle:    #2A3550;
-  }
+:root {
+  --bg:     #080C14;
+  --s1:     #0E1420;
+  --s2:     #141B2B;
+  --s3:     #1A2235;
+  --border: #1E2A40;
+  --b2:     #243048;
+  --accent: #3B7BFF;
+  --gold:   #F5C542;
+  --green:  #22C87A;
+  --red:    #FF4C4C;
+  --amber:  #F39C12;
+  --purple: #A78BFA;
+  --text:   #E8EDF5;
+  --muted:  #4E5E7A;
+  --dim:    #2A3650;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+/* ── HEADER ── */
+.hdr{
+  position:sticky;top:0;z-index:200;
+  background:rgba(8,12,20,0.95);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+}
+.hdr-top{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 0 12px;
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+  color:var(--text);letter-spacing:-0.02em;white-space:nowrap;
+}
+.logo em{color:var(--gold);font-style:normal;}
+.hdr-sub{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-left:2px;}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    min-height: 100vh;
-  }
+/* ── KPI STRIP ── */
+.kpis{display:flex;gap:1px;background:var(--border);border-radius:0;margin-left:auto;}
+.kpi{
+  background:var(--s2);padding:8px 16px;text-align:center;
+  display:flex;flex-direction:column;gap:2px;
+  min-width:80px;
+}
+.kpi:first-child{border-radius:8px 0 0 8px;}
+.kpi:last-child{border-radius:0 8px 8px 0;}
+.kpi-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);line-height:1;}
+.kpi-val.g{color:var(--green);}
+.kpi-val.a{color:var(--gold);}
+.kpi-val.b{color:var(--accent);}
+.kpi-lbl{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;}
 
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content:'';
-    position:fixed; inset:0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events:none; z-index:0;
-    opacity: 0.4;
-  }
+/* ── FILTER BAR ── */
+.fbar{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 0;
+  flex-wrap:wrap;
+}
+.ftag{
+  height:28px;padding:0 12px;border-radius:6px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);font-size:11px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+  display:flex;align-items:center;gap:5px;
+}
+.ftag:hover{border-color:var(--accent);color:var(--accent);}
+.ftag.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.ftag.on.gold{background:rgba(245,197,66,0.15);border-color:var(--gold);color:var(--gold);}
+.ftag.on.green{background:rgba(34,200,122,0.15);border-color:var(--green);color:var(--green);}
+.ftag.on.amber{background:rgba(243,156,18,0.15);border-color:var(--amber);color:var(--amber);}
+.ftag.on.red{background:rgba(255,76,76,0.15);border-color:var(--red);color:var(--red);}
+.search{
+  margin-left:auto;height:28px;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:6px;padding:0 12px;color:var(--text);
+  font-size:12px;font-family:'DM Sans',sans-serif;outline:none;width:180px;
+}
+.search:focus{border-color:var(--accent);}
+.search::placeholder{color:var(--muted);}
 
-  /* ── HEADER ── */
-  header {
-    position: sticky; top:0; z-index:100;
-    background: rgba(8,12,20,0.92);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-  }
+/* ── PROGRESS BARS ── */
+.pbars{
+  display:flex;gap:12px;padding:10px 0 14px;
+  border-bottom:1px solid var(--border);
+  align-items:center;
+}
+.pbar-item{flex:1;min-width:0;}
+.pbar-lbl{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;display:flex;justify-content:space-between;}
+.pbar-lbl span{color:var(--text);}
+.pbar-track{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:2px;transition:width .5s ease;}
+.pbar-fill.b{background:var(--accent);}
+.pbar-fill.a{background:var(--gold);}
+.pbar-fill.g{background:var(--green);}
 
-  .logo {
-    display: flex; align-items: center; gap: 12px;
-  }
-  .logo-mark {
-    width: 32px; height: 32px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 14px; color: white;
-  }
-  .logo-text {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700; font-size: 15px;
-    letter-spacing: 0.02em;
-  }
-  .logo-text span { color: var(--muted); font-weight: 400; }
+/* ── MAIN CONTENT ── */
+.main{padding:0 24px 40px;}
 
-  .badge {
-    font-size: 11px; font-weight: 500;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 4px 10px; border-radius: 20px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
+/* ── SECTION ── */
+.section{margin-top:16px;}
+.sec-hdr{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0 8px;
+  cursor:pointer;user-select:none;
+}
+.sec-hdr:hover .sec-title{color:var(--text);}
+.tier-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+}
+.sec-title{
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;
+  transition:color .15s;
+}
+.sec-count{
+  font-size:10px;color:var(--dim);
+  font-family:'DM Mono',monospace;margin-left:auto;
+}
+.sec-chevron{color:var(--muted);font-size:12px;transition:transform .2s;}
+.sec-chevron.open{transform:rotate(90deg);}
+.sec-body{overflow:hidden;transition:max-height .3s ease;}
 
-  /* ── HERO ── */
-  .hero {
-    padding: 80px 40px 60px;
-    max-width: 1100px; margin: 0 auto;
-    position: relative; z-index:1;
-  }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 24px;
-  }
-  .hero-tag::before {
-    content:''; width:6px; height:6px;
-    background: var(--accent); border-radius:50%;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity:1; transform:scale(1); }
-    50% { opacity:0.5; transform:scale(1.4); }
-  }
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl thead tr{border-bottom:1px solid var(--border);}
+.tbl th{
+  padding:7px 10px;text-align:left;
+  font-size:9px;color:var(--muted);
+  font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.07em;
+  font-weight:500;white-space:nowrap;background:var(--s1);
+  position:sticky;top:0;
+}
+.tbl th:first-child{border-radius:6px 0 0 0;}
+.tbl th:last-child{border-radius:0 6px 0 0;}
+.tbl tbody tr{
+  border-bottom:1px solid var(--border);
+  transition:background .1s;
+}
+.tbl tbody tr:hover{background:var(--s2);}
+.tbl tbody tr.hidden{display:none;}
+.tbl td{padding:9px 10px;vertical-align:middle;}
 
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(36px, 5vw, 60px);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: 20px;
-  }
-  h1 .highlight {
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ── TABLE CELLS ── */
+.state-cell{display:flex;align-items:center;gap:8px;}
+.abbr-tag{
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;
+  color:var(--text);background:var(--s3);border:1px solid var(--border);
+  border-radius:4px;padding:2px 6px;min-width:32px;text-align:center;
+}
+.state-fullname{font-size:12px;color:var(--text);font-weight:500;}
+.warn-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;}
 
-  .hero-sub {
-    font-size: 17px; color: var(--muted); max-width: 620px;
-    font-weight: 300; margin-bottom: 48px;
-  }
+/* ── VOL INPUT ── */
+.vol-cell{text-align:right;}
+.vol-inp{
+  background:transparent;border:none;
+  border-bottom:1px dashed var(--accent);
+  color:var(--accent);font-family:'DM Mono',monospace;
+  font-size:11px;width:50px;text-align:center;
+  outline:none;padding:2px 0;
+}
+.vol-inp::placeholder{color:var(--accent);opacity:0.35;}
 
-  .hero-stats {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px; margin-bottom: 0;
-  }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    position: relative; overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .stat-card::after {
-    content:''; position:absolute; top:0; left:0; right:0; height:2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    opacity:0; transition: opacity 0.2s;
-  }
-  .stat-card:hover::after { opacity:1; }
-  .stat-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 28px; font-weight: 800;
-    line-height: 1; margin-bottom: 6px;
-    color: var(--text);
-  }
-  .stat-val.gold { color: var(--gold); }
-  .stat-val.green { color: var(--green); }
-  .stat-val.blue { color: var(--accent2); }
-  .stat-label { font-size: 12px; color: var(--muted); font-weight: 400; }
+/* ── STATUS PILL ── */
+.sts-wrap{display:flex;gap:3px;align-items:center;}
+.sts-pill{
+  font-size:9px;font-family:'DM Mono',monospace;
+  padding:3px 8px;border-radius:4px;border:1px solid transparent;
+  cursor:pointer;transition:all .12s;white-space:nowrap;font-weight:500;
+}
+.sts-pill.s0{background:var(--s3);color:var(--muted);border-color:var(--border);}
+.sts-pill.s0:hover{border-color:var(--b2);color:var(--text);}
+.sts-pill.s1{background:rgba(243,156,18,0.12);color:var(--amber);border-color:rgba(243,156,18,0.3);}
+.sts-pill.s2{background:rgba(59,123,255,0.12);color:var(--accent);border-color:rgba(59,123,255,0.3);}
+.sts-pill.s3{background:rgba(34,200,122,0.12);color:var(--green);border-color:rgba(34,200,122,0.3);}
+.sts-pill.inactive{opacity:0.25;}
+.sts-pill.inactive:hover{opacity:0.5;}
 
-  /* ── TABS ── */
-  .tabs-wrapper {
-    max-width: 1100px; margin: 0 auto;
-    padding: 0 40px;
-    position: relative; z-index:1;
-  }
+/* ── READY CELL ── */
+.rdy{
+  font-size:10px;font-family:'DM Mono',monospace;font-weight:500;
+  padding:3px 8px;border-radius:4px;white-space:nowrap;
+  display:inline-block;
+}
+.rdy.live{background:rgba(34,200,122,0.12);color:var(--green);border:1px solid rgba(34,200,122,0.25);}
+.rdy.prog{background:rgba(243,156,18,0.1);color:var(--amber);border:1px solid rgba(243,156,18,0.2);}
+.rdy.no  {background:var(--s3);color:var(--muted);border:1px solid var(--border);}
 
-  .tabs-nav {
-    display: flex; gap: 4px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 40px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tabs-nav::-webkit-scrollbar { display:none; }
+/* ── FEE CELL ── */
+.fee-cell{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:right;white-space:nowrap;}
 
-  .tab-btn {
-    background: none; border: none; cursor: pointer;
-    padding: 12px 20px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500;
-    color: var(--muted);
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    white-space: nowrap;
-    transition: color 0.2s, border-color 0.2s;
-    letter-spacing: 0.01em;
-  }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active {
-    color: var(--text);
-    border-bottom-color: var(--accent);
-  }
+/* ── PROC CELL ── */
+.proc-cell{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;}
+.proc-cell.slow{color:var(--red);}
+.proc-cell.med{color:var(--amber);}
+.proc-cell.fast{color:var(--muted);}
 
-  .tab-panel { display: none; animation: fadeIn 0.25s ease; }
-  .tab-panel.active { display: block; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+/* ── NOTES CELL ── */
+.note-cell{font-size:10px;color:var(--muted);max-width:280px;line-height:1.4;}
+.note-cell.warn{color:#e07070;}
 
-  /* ── SECTION ELEMENTS ── */
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px; font-weight: 700;
-    margin-bottom: 8px;
-    letter-spacing: -0.01em;
-  }
-  .section-intro {
-    color: var(--muted); font-size: 14px;
-    margin-bottom: 32px; max-width: 700px;
-    font-weight: 300;
-  }
-
-  /* ── CARDS ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px 28px;
-    margin-bottom: 16px;
-    transition: border-color 0.2s;
-  }
-  .card:hover { border-color: var(--subtle); }
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px; font-weight: 700;
-    letter-spacing: 0.02em;
-    margin-bottom: 10px;
-    text-transform: uppercase; color: var(--accent);
-  }
-  .card p { color: var(--muted); font-size: 14px; line-height: 1.75; }
-  .card p + p { margin-top: 10px; }
-
-  /* ── GRID ── */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-  @media(max-width:700px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
-
-  /* ── CALLOUT ── */
-  .callout {
-    border-left: 3px solid var(--accent);
-    background: rgba(59,123,255,0.06);
-    border-radius: 0 10px 10px 0;
-    padding: 16px 20px;
-    margin: 24px 0;
-    font-size: 14px; line-height: 1.75;
-  }
-  .callout.warn {
-    border-left-color: var(--gold);
-    background: rgba(245,197,66,0.06);
-  }
-  .callout.danger {
-    border-left-color: var(--red);
-    background: rgba(255,76,76,0.06);
-  }
-  .callout.success {
-    border-left-color: var(--green);
-    background: rgba(34,200,122,0.06);
-  }
-
-  /* ── TABLE ── */
-  .data-table {
-    width: 100%; border-collapse: collapse;
-    font-size: 13.5px; margin-bottom: 24px;
-  }
-  .data-table th {
-    background: var(--surface2);
-    font-family: 'Syne', sans-serif;
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--muted); padding: 12px 16px;
-    text-align: left; border-bottom: 1px solid var(--border);
-  }
-  .data-table td {
-    padding: 12px 16px; border-bottom: 1px solid rgba(30,42,64,0.6);
-    color: var(--text); vertical-align: top; line-height: 1.6;
-  }
-  .data-table tr:last-child td { border-bottom: none; }
-  .data-table tr:hover td { background: rgba(255,255,255,0.015); }
-  .data-table td:first-child { color: var(--text); font-weight: 500; }
-
-  /* ── PILL / TAG ── */
-  .pill {
-    display: inline-block;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
-    text-transform: uppercase; padding: 3px 9px; border-radius: 20px;
-  }
-  .pill-blue  { background: rgba(59,123,255,0.15); color: var(--accent); }
-  .pill-green { background: rgba(34,200,122,0.15); color: var(--green); }
-  .pill-red   { background: rgba(255,76,76,0.15);  color: var(--red); }
-  .pill-gold  { background: rgba(245,197,66,0.15); color: var(--gold); }
-  .pill-gray  { background: var(--subtle); color: var(--muted); }
-
-  /* ── STEP LIST ── */
-  .step-list { list-style: none; counter-reset: steps; }
-  .step-list li {
-    counter-increment: steps;
-    display: flex; gap: 16px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px; line-height: 1.7;
-  }
-  .step-list li:last-child { border-bottom: none; }
-  .step-list li::before {
-    content: counter(steps);
-    min-width: 28px; height: 28px;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
-    color: var(--accent); flex-shrink: 0; margin-top: 2px;
-  }
-  .step-list li strong { color: var(--text); display: block; margin-bottom: 2px; }
-  .step-list li span { color: var(--muted); }
-
-  /* ── RISK ROWS ── */
-  .risk-row {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 22px;
-    margin-bottom: 12px;
-    display: grid;
-    grid-template-columns: 28px 1fr 2fr;
-    gap: 16px; align-items: start;
-    transition: border-color 0.2s;
-  }
-  .risk-row:hover { border-color: var(--subtle); }
-  .risk-icon { font-size: 18px; margin-top: 2px; }
-  .risk-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
-  .risk-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
-  .risk-mitigant { font-size: 13px; color: var(--muted); line-height: 1.65; }
-  .risk-mitigant strong { color: var(--green); font-weight: 600; }
-
-  /* ── PRO/CON SPLIT ── */
-  .pro-con {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-    margin-bottom: 24px;
-  }
-  @media(max-width:640px) { .pro-con { grid-template-columns:1fr; } }
-  .pro-box, .con-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px 24px;
-  }
-  .pro-box { border-top: 2px solid var(--green); }
-  .con-box { border-top: 2px solid var(--red); }
-  .box-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-  .pro-box .box-label { color: var(--green); }
-  .con-box .box-label { color: var(--red); }
-  .check-list { list-style: none; }
-  .check-list li {
-    font-size: 13.5px; color: var(--muted);
-    padding: 6px 0; line-height: 1.6;
-    display: flex; gap: 10px; align-items: flex-start;
-  }
-  .check-list li::before { flex-shrink: 0; margin-top: 3px; }
-  .pro-box .check-list li::before { content: '✓'; color: var(--green); font-weight: 700; }
-  .con-box .check-list li::before { content: '×'; color: var(--red); font-weight: 700; }
-
-  /* ── DIVIDER ── */
-  .divider { height: 1px; background: var(--border); margin: 32px 0; }
-
-  /* ── PHASE BLOCK ── */
-  .phase {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px 28px;
-    margin-bottom: 16px;
-    position: relative; overflow: hidden;
-  }
-  .phase::before {
-    content: '';
-    position: absolute; left:0; top:0; bottom:0; width:3px;
-  }
-  .phase.p1::before { background: var(--accent); }
-  .phase.p2::before { background: var(--accent2); }
-  .phase.p3::before { background: var(--gold); }
-  .phase-tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; margin-bottom: 8px;
-  }
-  .p1 .phase-tag { color: var(--accent); }
-  .p2 .phase-tag { color: var(--accent2); }
-  .p3 .phase-tag { color: var(--gold); }
-  .phase-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px; font-weight: 700; margin-bottom: 10px;
-  }
-  .phase p { font-size: 14px; color: var(--muted); line-height: 1.75; }
-
-  /* ── DATA FLAG ── */
-  .flag-item {
-    display: flex; gap: 12px; align-items: flex-start;
-    padding: 12px 0; border-bottom: 1px solid var(--border);
-    font-size: 14px;
-  }
-  .flag-item:last-child { border-bottom: none; }
-  .flag-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--red); flex-shrink:0; margin-top:6px;
-  }
-  .flag-text { color: var(--muted); line-height: 1.65; }
-  .flag-text strong { color: var(--text); }
-
-  /* ── PLACEHOLDER ── */
-  .placeholder-box {
-    background: var(--surface);
-    border: 1px dashed var(--subtle);
-    border-radius: 12px;
-    padding: 60px 40px;
-    text-align: center;
-  }
-  .placeholder-box .ph-icon { font-size: 40px; margin-bottom: 16px; opacity: 0.4; }
-  .placeholder-box h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px; font-weight: 700;
-    margin-bottom: 10px; color: var(--text);
-  }
-  .placeholder-box p { color: var(--muted); font-size: 14px; max-width: 480px; margin: 0 auto 24px; line-height: 1.75; }
-
-  .input-list { text-align: left; max-width: 480px; margin: 0 auto; }
-  .input-list li {
-    display: flex; gap: 10px; padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px; color: var(--muted);
-  }
-  .input-list li:last-child { border-bottom:none; }
-  .input-list li::before { content:'→'; color: var(--accent); flex-shrink:0; }
-
-  /* ── HEADING UTILITY ── */
-  h2.sec {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px; font-weight: 700;
-    margin: 32px 0 12px;
-    color: var(--text);
-  }
-  h2.sec:first-child { margin-top: 0; }
-
-  /* ── FOOTER ── */
-  footer {
-    max-width: 1100px; margin: 60px auto 0;
-    padding: 24px 40px 40px;
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 12px; color: var(--muted);
-    position: relative; z-index:1;
-  }
-
-  /* ── SCROLL PADDING ── */
-  .tab-panel { padding-bottom: 60px; }
+/* ── COMING SOON SECTION ── */
+.coming-soon-section{
+  margin-top:16px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+}
+.cs-hdr{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;background:var(--s1);cursor:pointer;
+  user-select:none;
+}
+.cs-hdr:hover{background:var(--s2);}
+.cs-badge{
+  font-size:9px;font-family:'DM Mono',monospace;font-weight:500;
+  padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:0.07em;
+  background:rgba(167,139,250,0.12);color:var(--purple);border:1px solid rgba(167,139,250,0.25);
+}
+.cs-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;}
+.cs-body{padding:0 16px 12px;background:var(--s1);}
+.cs-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:6px;padding-top:12px;
+}
+.cs-chip{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.cs-abbr{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--text);}
+.cs-name{font-size:11px;color:var(--muted);}
+.cs-meta{font-size:9px;color:var(--dim);font-family:'DM Mono',monospace;}
+.cs-warn{font-size:9px;color:var(--red);}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="logo">
-    <div class="logo-mark">RBI</div>
-    <div class="logo-text">Insurance Brokerage LLC <span>/ Opportunity Assessment</span></div>
+<!-- ── HEADER ── -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="logo">RBI Insurance Brokerage <em>License Control</em></div>
+      <div class="hdr-sub">Individual (Alan · 2-20) + Agency Entity (LLC) · 2 licenses per state · NIPR.com · NY files via NY DFS</div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-val" id="k-total">44</div><div class="kpi-lbl">Active States</div></div>
+      <div class="kpi"><div class="kpi-val b" id="k-ind">0</div><div class="kpi-lbl">Ind. Live</div></div>
+      <div class="kpi"><div class="kpi-val b" id="k-ag">0</div><div class="kpi-lbl">Agency Live</div></div>
+      <div class="kpi"><div class="kpi-val g" id="k-rdy">0</div><div class="kpi-lbl">Ready to Sell</div></div>
+      <div class="kpi"><div class="kpi-val a">~$8K</div><div class="kpi-lbl">Est. Cost</div></div>
+    </div>
   </div>
-  <div class="badge">Confidential — Internal Draft</div>
-</header>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-tag">Decision Memo · April 2026</div>
-  <h1>Should RBI Launch an<br><span class="highlight">Insurance Brokerage?</span></h1>
-  <p class="hero-sub">A thorough, honest analysis of the opportunity, what it takes to build it, and what can go wrong. Written before the financial model so the decision is grounded in reality first.</p>
-  <div class="hero-stats">
-    <div class="stat-card">
-      <div class="stat-val gold">TBD</div>
-      <div class="stat-label">Loan closings per month</div>
+  <div class="pbars">
+    <div class="pbar-item">
+      <div class="pbar-lbl">Individual Licenses <span id="pct-ind">0%</span></div>
+      <div class="pbar-track"><div class="pbar-fill b" id="pb-ind"></div></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-val blue">$1.5B+</div>
-      <div class="stat-label">Loan volume — last 24 months</div>
+    <div class="pbar-item">
+      <div class="pbar-lbl">Agency Entity Licenses <span id="pct-ag">0%</span></div>
+      <div class="pbar-track"><div class="pbar-fill a" id="pb-ag"></div></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-val green">10–15%</div>
-      <div class="stat-label">Broker commission of annual premium</div>
+    <div class="pbar-item">
+      <div class="pbar-lbl">Ready to Sell (both live) <span id="pct-rdy">0%</span></div>
+      <div class="pbar-track"><div class="pbar-fill g" id="pb-rdy"></div></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-val gold">TBD</div>
-      <div class="stat-label">Avg loan size</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val">100%</div>
-      <div class="stat-label">Borrowers required to carry insurance</div>
-    </div>
+  </div>
+
+  <div class="fbar">
+    <span style="font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.07em;">Filter</span>
+    <button class="ftag on" data-f="all" onclick="setF(this)">All</button>
+    <button class="ftag" data-f="t1" onclick="setF(this)">Tier 1</button>
+    <button class="ftag" data-f="t2" onclick="setF(this)">Other States</button>
+    <button class="ftag red" data-f="warn" onclick="setF(this)">⚠️ Attention</button>
+    <button class="ftag green" data-f="live" onclick="setF(this)">✅ Live</button>
+    <button class="ftag amber" data-f="prog" onclick="setF(this)">🔄 In Progress</button>
+    <input class="search" type="text" placeholder="Search state…" oninput="doSearch(this.value)">
   </div>
 </div>
 
-<!-- TABS -->
-<div class="tabs-wrapper">
-  <nav class="tabs-nav">
-    <button class="tab-btn active" onclick="showTab('opportunity')">01 · Opportunity</button>
-    <button class="tab-btn" onclick="showTab('model')">02 · How It Works</button>
-    <button class="tab-btn" onclick="showTab('licensing')">03 · Licensing & Compliance</button>
-    <button class="tab-btn" onclick="showTab('costs')">04 · Real Costs</button>
-    <button class="tab-btn" onclick="showTab('gtm')">05 · Go-to-Market</button>
-    <button class="tab-btn" onclick="showTab('competitive')">06 · Competitive Landscape</button>
-    <button class="tab-btn" onclick="showTab('risks')">07 · Risks</button>
-    <button class="tab-btn" onclick="showTab('team')">08 · Team & Ops</button>
-    <button class="tab-btn" onclick="showTab('financials')">09 · Financials</button>
-    <button class="tab-btn" onclick="showTab('decision')" style="border-bottom-color:var(--gold);color:var(--gold);">10 · Questions & Bottom Line</button>
-  </nav>
-
-  <!-- ─────────── 01 OPPORTUNITY ─────────── -->
-  <div id="opportunity" class="tab-panel active">
-    <div class="section-title">The Opportunity</div>
-    <div class="section-intro">Why this is worth examining — and what makes RBI's position structurally different from any generic insurance startup.</div>
-
-    <div class="callout success">
-      <strong>The core insight:</strong> Every borrower in RBI's pipeline is legally required to carry property insurance before their loan funds. That requirement does not go away. The only question is whether the commission on that policy goes to an outside broker — or stays inside RBI.
-    </div>
-
-    <h2 class="sec">What Kind of Insurance Are We Talking About?</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">RBI lends on investment properties — fix-and-flip projects, DSCR rentals, bridge loans, and new construction. These are <em>not</em> standard homeowner's policies. They are specialty lines that most retail agents cannot write and most online comparison platforms don't serve. This is important: the brokerage is not competing with State Farm. It is operating in the surplus lines and specialty property market where broker relationships and expertise matter more than advertising budgets.</p>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">The insurance math on investment property loans is significant at the loan sizes RBI typically operates at. Premium and commission estimates will be populated once average loan size and loan type mix are confirmed.</p>
-
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">Premiums on investment property are typically calculated as a percentage of insured value, with broker commissions earned as a percentage of that premium. The per-policy commission will vary materially by loan size, loan type, and geography — all of which are pending confirmation.</p>
-
-    <table class="data-table">
-      <thead><tr><th>Loan Type</th><th>Required Insurance</th><th>Why It's Needed</th><th>High-Cost States (FL, CA)</th><th>Lower-Cost States (TX + most others)</th><th>Broker Commission (10–15%)</th></tr></thead>
-      <tbody>
-        <tr><td>Fix &amp; Flip (vacant, under reno)</td><td>Builder's Risk (incl. vacant property coverage) + General Liability</td><td>Homeowners policies exclude vacant properties and properties under renovation; lender requires coverage during construction</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td></tr>
-        <tr><td>DSCR / Rental Property</td><td>Landlord Policy (DP-3 or equivalent dwelling fire policy)</td><td>Covers non-owner occupied rental properties; standard homeowners insurance does not apply to rentals</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td></tr>
-        <tr><td>Bridge Loan</td><td>Builder's Risk (if under renovation) OR Landlord Policy (if stabilized/occupied)</td><td>Insurance must match property condition (renovation vs. stabilized); lender requires appropriate coverage based on use</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td></tr>
-        <tr><td>New Construction</td><td>Builder's Risk (Course of Construction) + General Liability</td><td>Property is being built from the ground up; requires coverage for structure, materials, and construction-related risks</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td></tr>
-        <tr><td>Flood Zone Properties</td><td>Flood Insurance (NFIP or Private Flood Policy)</td><td>Required by lenders if property is in a FEMA-designated flood zone; separate policy from standard property insurance</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td><td style="color:var(--muted);font-style:italic;">TBD</td></tr>
-      </tbody>
-    </table>
-    <p style="color:var(--muted);font-size:12px;margin-bottom:24px;font-style:italic;">All premium and commission figures to be confirmed based on average loan size, loan type mix, and geographic distribution. High-cost states (FL, CA) typically price 50–100% above lower-cost markets for the same property value.</p>
-
-    <div class="callout warn" style="margin-top:24px;">
-      <strong>🔑 The most important question before committing to full independence:</strong> What % of RBI's loan book is DSCR/rental vs. bridge, fix &amp; flip, and new construction?<br><br>
-      Bridge, fix &amp; flip, and new construction loans are short-term — the property sells or refinances before the policy renews. No renewal commission. The brokerage earns once per loan and resets.<br><br>
-      DSCR and rental loans are long-term holds. The borrower keeps the property, the policy renews every year, and the brokerage earns passively without placing a single new policy. This is what makes the independent model compellingly better than any alternative over time.<br><br>
-      <strong>If DSCR/rental is a meaningful % of RBI's book</strong> — say 25%+ — the renewal economics justify the full complexity of building an independent licensed brokerage across 40 states. The passive income compounds year over year and the long-term margin is unbeatable.<br><br>
-      <strong>If DSCR/rental is low</strong> — say under 15% — RBI is running a predominantly transactional brokerage. Policies don't renew, revenue resets with every loan cycle, and the full operational burden of multi-state licensing may not be worth it relative to a simpler profit-share arrangement with an established specialist broker who already has the carrier relationships and compliance infrastructure in place.<br><br>
-      This one number — the DSCR/rental % — is the single most important input before deciding which path to take.
-    </div>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">Property insurance premiums vary significantly by state. High-risk markets — coastal states, catastrophe-prone regions — can price 50–100% higher than inland markets for the same property value and loan type. This matters because broker commissions are a percentage of premium — a higher-premium state generates more revenue per policy placed, for the exact same amount of work. RBI's state mix is one of the most important inputs to the financial model and will be confirmed shortly.</p>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">The national investment property insurance market has also seen meaningful new carrier entry following recent state-level legislative reforms. Carrier appetite for new agency appointments is currently stronger than it has been in several years — this is good timing for a new brokerage seeking to build a carrier panel.</p>
-
-    <h2 class="sec">The Vertical Integration Precedent</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">RBI has already run this playbook twice. Title services and inspection services were added as vertical revenue streams on identical logic: every closing needs them, the lender controls the customer at the point of need, and capturing the revenue internally compounds over time. Insurance is the third iteration — with the added upside that certain loan types, particularly DSCR and rental, generate annual renewal commissions on every policy ever placed. The renewal dynamic makes the business more valuable over time for the right loan mix.</p>
-
-    <h2 class="sec">The Broader Market Opportunity</h2>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">National Landlord Insurance Market</div>
-        <p>Valued at <strong style="color:var(--text);">$20.7B</strong> in 2023. Projected to reach <strong style="color:var(--text);">$40.9B by 2032</strong> at a 7.8% CAGR. Driven by the continued growth of single-family rental investment and DSCR lending nationally.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">Hard Money Channel Is Untapped</div>
-        <p>There are hundreds of private lenders doing meaningful volume across the country. Almost none have a vertically integrated insurance brokerage. If RBI builds one that works, it becomes infrastructure that other lenders will want — a platform play beyond RBI's own pipeline.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─────────── 02 HOW IT WORKS ─────────── -->
-  <div id="model" class="tab-panel">
-    <div class="section-title">How the Business Works</div>
-    <div class="section-intro">The mechanics of a pure brokerage model, the commission structure, how the money flows, and how it integrates with RBI's loan pipeline.</div>
-
-    <h2 class="sec">Pure Brokerage — No Underwriting Risk</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">RBI Insurance Brokerage LLC would operate exclusively as a licensed P&C insurance broker. It does not underwrite policies, hold insurance reserves, or assume any actuarial risk. It is an intermediary: it shops coverage across multiple carriers, presents the best options to the borrower, binds the selected policy, and earns a commission paid by the carrier — not the borrower. The borrower pays their premium directly to the carrier. The brokerage's revenue is entirely commission-based, with zero exposure to claims.</p>
-
-    <h2 class="sec">The Commission Structure</h2>
-    <table class="data-table">
-      <thead><tr><th>Revenue Stream</th><th>How It Works</th><th>Rate</th><th>Timing</th></tr></thead>
-      <tbody>
-        <tr><td>New Policy Commission</td><td>Carrier pays brokerage at policy binding; built into carrier's pricing — borrower does not pay more</td><td>10–15%</td><td>Upfront, at closing</td></tr>
-        <tr><td>Renewal Commission</td><td>Paid automatically when policy renews each year — no additional work required</td><td>10–12%</td><td>Annually, passively</td></tr>
-        <tr><td>Flood Insurance Commission</td><td>Separate policy for flood zone properties; NFIP or private market</td><td>10–12%</td><td>Upfront + annual renewal</td></tr>
-        <tr><td>Contingent / Override Commission</td><td>Annual volume bonus from carriers once placed premium exceeds thresholds (~$500K–$1M)</td><td>1–6%</td><td>Annually, at threshold</td></tr>
-      </tbody>
-    </table>
-
-    <div class="callout">
-      <strong>How premiums are calculated:</strong> Property insurance premiums on investment property are typically priced as a percentage of the insured value — the exact rate varies by loan type, property condition, and geography. Broker commissions are earned as a percentage of that premium. Both the premium rate and the resulting per-policy commission will be confirmed once average loan size and state mix are known.
-    </div>
-
-    <div class="callout warn" style="margin-top:-8px;">
-      <strong>🔴 Renewal rate — to be confirmed.</strong> Renewal commissions only apply when the borrower holds the property past the first policy year. Based on RBI's publicly listed deal mix — predominantly bridge loans, fix &amp; flip, and new construction — most loans are short-term and transactional. The property sells or refinances before the policy renews, meaning renewal retention may be as low as 10–20%. DSCR/rental loans are the exception — those generate multi-year renewals. The actual renewal rate is a critical input that needs to be confirmed with RBI based on their real loan type breakdown. This materially affects long-term revenue projections.
-    </div>
-
-    <h2 class="sec">How the Money Actually Flows</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.75;">Understanding where RBI sits in the distribution chain matters — because it shows exactly where the commission comes from and why the borrower never pays more.</p>
-
-    <style>
-      .chain-wrap { margin-bottom: 8px; }
-      .chain-row { display:flex; align-items:center; gap:0; margin:12px 0 4px; }
-      .chain-node { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center; }
-      .chain-node.highlight { border-color:var(--accent); background:rgba(59,123,255,0.08); }
-      .chain-node .cn-label { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--text); margin-bottom:3px; }
-      .chain-node .cn-sub { font-size:11px; color:var(--muted); }
-      .chain-node .cn-sub.earn { color:var(--green); font-weight:600; }
-      .chain-arrow { width:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:16px; padding:0 2px; }
-      .commission-row { display:flex; align-items:center; justify-content:center; gap:8px; margin:8px 0 4px; padding:8px 12px; background:rgba(245,197,66,0.07); border:1px solid rgba(245,197,66,0.2); border-radius:8px; font-size:12px; color:var(--gold); }
-      .commission-row .arr { font-size:14px; }
-      .chain-bottom { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:16px; }
-      .chain-bottom-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center; }
-      .chain-bottom-card .cb-label { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--text); margin-bottom:4px; }
-      .chain-bottom-card .cb-sub { font-size:11px; color:var(--muted); }
-      .chain-bottom-card.blue { border-color:var(--accent); }
-      .chain-bottom-card.green { border-color:var(--green); }
-      .chain-bottom-card.purple { border-color:#7B61FF; }
-      @media(max-width:600px){ .chain-bottom { grid-template-columns:1fr; } }
-    </style>
-
-    <div class="chain-wrap">
-      <div class="chain-row">
-        <div class="chain-node">
-          <div class="cn-label">Borrower</div>
-          <div class="cn-sub">Pays 100% premium</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node highlight">
-          <div class="cn-label">RBI Brokerage</div>
-          <div class="cn-sub earn">Earns 10–15%</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node">
-          <div class="cn-label">Wholesale Broker</div>
-          <div class="cn-sub">Market access (Burns &amp; Wilcox)</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node">
-          <div class="cn-label">MGA</div>
-          <div class="cn-sub">Underwrites risk</div>
-        </div>
-        <div class="chain-arrow">→</div>
-        <div class="chain-node">
-          <div class="cn-label">Carrier</div>
-          <div class="cn-sub">Holds risk, pays claims</div>
-        </div>
-      </div>
-      <div class="commission-row">
-        <span class="arr">←</span>
-        <span>Carrier funds all commissions — borrower never pays more because a broker is involved</span>
-      </div>
-      <div class="chain-bottom" style="margin-top:16px;">
-        <div class="chain-bottom-card green">
-          <div class="cb-label">Borrower pays same</div>
-          <div class="cb-sub">Commission is built into carrier pricing — not added on top</div>
-        </div>
-        <div class="chain-bottom-card blue">
-          <div class="cb-label">RBI earns 10–15%</div>
-          <div class="cb-sub">Of annual premium — upfront at binding, then again every renewal</div>
-        </div>
-        <div class="chain-bottom-card purple">
-          <div class="cb-label">Zero risk to RBI</div>
-          <div class="cb-sub">Carrier holds all underwriting risk — RBI is purely a distributor</div>
-        </div>
-      </div>
-    </div>
-
-    <h2 class="sec">Insurance Is Built Into Closing</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">Property insurance is a required condition for every loan RBI funds — not an optional add-on. Right now, borrowers are responsible for sourcing it themselves. The brokerage changes that. Once a loan is approved, deal details flow directly to the brokerage. A compliant policy is quoted within 24–48 hours and included in the borrower's closing package. From the borrower's perspective, insurance becomes a line item in their total cash to close — not a separate process they have to manage independently.</p>
-
-    <h2 class="sec">Default, Not Optional</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">The brokerage presents a ready-to-bind policy that meets all of RBI's lender requirements. Borrowers can absolutely use their own provider — but if they do, the policy must meet all coverage requirements, must be reviewed and approved by RBI before closing, and any issues with that policy can delay funding. This structure makes RBI's option the fastest and simplest path. The brokerage doesn't need to sell anything. It just needs to be there at the right moment, with the right quote.</p>
-
-    <h2 class="sec">Why This Works</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.75;">Insurance is already mandatory — that requirement exists regardless of whether RBI has a brokerage or not. RBI controls both the timing and the approval of coverage, which means the brokerage sits at exactly the right point in the process. The only thing that changes is where the commission goes. Right now it leaves. With the brokerage, it stays.</p>
-
-    <h2 class="sec">Pipeline Integration — The 5-Step Workflow</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.75;">The more seamlessly the brokerage is embedded into RBI's loan workflow, the higher the capture rate and the more valuable the business becomes. The ideal setup is a system-level trigger at loan approval — borrower receives a quote as part of the standard closing checklist, clicks to bind, done. RBI already has the closing infrastructure, the tech team, and the borrower touchpoints to make this work. The integration is the mechanism that turns loan volume directly into insurance revenue.</p>
-    <ol class="step-list">
-      <li><strong>Trigger</strong><span>Loan approval in RBI's system notifies the brokerage with property address, loan amount, and property type. A system-level trigger at approval — rather than a manual step — maximizes how early in the process the borrower receives the quote.</span></li>
-      <li><strong>Quote</strong><span>Brokerage runs a multi-carrier comparison in the AMS within 24–48 hours. Investment property specialty carriers only — this is not a homeowner's policy search.</span></li>
-      <li><strong>Delivery</strong><span>Clean one-page quote summary sent to borrower as part of the standard closing checklist. Borrower clicks to bind. Loan processor is copied for tracking.</span></li>
-      <li><strong>Bind or Waive</strong><span>Borrower accepts and coverage is bound immediately, or provides their own certificate of insurance. Either way, the loan proceeds. No pressure, no friction.</span></li>
-      <li><strong>Certificate + Renewal Tracking</strong><span>Certificate of insurance issued naming RBI as loss payee/additional insured. AMS flags renewal 45 days before expiration — brokerage re-quotes if needed and earns renewal commission.</span></li>
-    </ol>
-
-    <div class="callout">
-      <strong>The integration is the multiplier.</strong> The deeper the brokerage is embedded into the loan workflow — automated trigger at approval, quote delivered as part of the closing checklist, certificate issued seamlessly — the higher the capture rate and the more value the brokerage generates. The good news is that RBI already has the technology team, the borrower relationships, and the closing infrastructure to make this plug-and-play. The opportunity scales directly with how tightly it's woven in.
-    </div>
-
-    <h2 class="sec">Target Carrier Panel</h2>
-    <table class="data-table">
-      <thead><tr><th>Carrier / Access</th><th>Specialty</th><th>Access Path</th><th>Year 1 Priority</th></tr></thead>
-      <tbody>
-        <tr><td>Burns &amp; Wilcox (wholesale)</td><td>Lloyd's of London + 50+ specialty carriers; fix-and-flip, vacant, builder's risk, hard-to-place</td><td>Retail-to-wholesale; no volume minimum; day-one access</td><td><span class="pill pill-green">High</span></td></tr>
-        <tr><td>Foremost Insurance (Farmers)</td><td>Non-standard dwelling fire; DP-1/DP-3; strong investment property appetite</td><td>Direct appointment; low volume requirements for new agencies</td><td><span class="pill pill-green">High</span></td></tr>
-        <tr><td>American Modern (Munich Re)</td><td>Investment property specialist; fix-and-flip, DSCR, vacant</td><td>Direct appointment; moderate requirements</td><td><span class="pill pill-blue">Medium</span></td></tr>
-        <tr><td>Neptune Flood</td><td>Private flood; competitive vs. NFIP; fast bind</td><td>Direct appointment; no volume minimum</td><td><span class="pill pill-green">High</span></td></tr>
-        <tr><td>Velocity Risk (MGA)</td><td>Hard-to-place specialty risks; renovation and construction</td><td>MGA access via appointment</td><td><span class="pill pill-blue">Medium</span></td></tr>
-        <tr><td>Scottsdale Insurance (Nationwide)</td><td>Surplus lines; vacant; builder's risk; national scope</td><td>Via Burns &amp; Wilcox or direct Year 2</td><td><span class="pill pill-gray">Year 2</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- ─────────── 03 LICENSING ─────────── -->
-  <div id="licensing" class="tab-panel">
-    <div class="section-title">Licensing &amp; Compliance</div>
-    <div class="section-intro">The most commonly underestimated part of launching a brokerage. Getting this wrong — even by omission — creates fines, forced shutdowns, and personal liability.</div>
-
-    <div class="callout warn">
-      This section is intentionally detailed. Read it fully before committing to a timeline. Licensing involves third-party timelines outside the brokerage's control, and compliance is an ongoing operational function — not a one-time checkbox.
-    </div>
-
-    <h2 class="sec">The 2-20 General Lines Agent License — Where to Start</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">Since RBI is headquartered in Florida, the natural starting point is the <strong style="color:var(--text);">Florida 2-20 General Lines (P&C) Agent License</strong>, issued by the Florida Department of Financial Services. This license covers all P&C products in Florida and — critically — enables non-resident reciprocal licensing in most other states without retaking exams. It is the standard license for independent agency principals and the most efficient path to multi-state coverage.</p>
-
-    <table class="data-table">
-      <thead><tr><th>Step</th><th>Details</th><th>Cost</th><th>Timeline</th></tr></thead>
-      <tbody>
-        <tr><td>200-hour pre-licensing course</td><td>Online, self-paced; FL DFS approved; covers P&C fundamentals, Florida law, ethics</td><td>$99 – $300</td><td>4–8 weeks with consistent effort</td></tr>
-        <tr><td>State exam (Pearson VUE)</td><td>70% pass required; first-time pass rate nationally ~50–60%; requires genuine preparation</td><td>$44/attempt</td><td>Schedule after course; 1–2 week wait</td></tr>
-        <tr><td>License application (FL DFS MyProfile)</td><td>Submit after passing exam; background check included</td><td>$55</td><td>5–10 business days</td></tr>
-        <tr><td>Fingerprinting + background check</td><td>IdentoGO; must be clean — financial crimes are disqualifying</td><td>~$50</td><td>Same-day appointments available</td></tr>
-        <tr><td>Entity (LLC) agency registration</td><td>Separate FL DFS filing; designates licensed individual as agent in charge</td><td>$150 – $250</td><td>1–2 weeks after individual license</td></tr>
-        <tr><td><strong>Total realistic timeline</strong></td><td colspan="2"><strong style="color:var(--text);">~$350 – $650 total</strong></td><td><strong style="color:var(--gold);">8–12 weeks minimum</strong></td></tr>
-      </tbody>
-    </table>
-
-    <h2 class="sec">E&amp;O Insurance — Non-Negotiable Before Operations</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:12px;line-height:1.75;">Errors &amp; Omissions (E&O) insurance is professional liability coverage for the brokerage. It protects the entity if a borrower claims the brokerage placed wrong coverage, gave bad advice, or missed a disclosure — and sues. Most carriers will reject an appointment application from a brokerage without active E&O. It must be obtained before the first appointment application is submitted.</p>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">Cost & Coverage</div>
-        <p>New P&C agency with $1M/$1M limits: <strong style="color:var(--text);">$2,500–$4,500/year</strong>. Increases as premium volume grows. This is a permanent fixed operating cost — it never goes away.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">Critical: Claims-Made Policy</div>
-        <p>E&O coverage only applies if the policy is <em>active when the claim is filed</em>, not when the incident occurred. A coverage lapse — even briefly — creates personal liability for past placements. Tail coverage is required if the brokerage ever closes.</p>
-      </div>
-    </div>
-
-    <h2 class="sec">Multi-State Licensing — The Real Complexity</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">RBI operates in 40+ states. To place policies on loans outside the home state, the brokerage needs a non-resident producer license in every state where it writes business. Most states offer reciprocal licensing for 2-20 holders — no new exam required, just an application and fee. But 40 licenses means 40 renewal dates, 40 CE requirements, and 40 sets of compliance rules. This is manageable with the right system — but it requires dedicated ongoing attention, not just a one-time setup.</p>
-
-    <table class="data-table">
-      <thead><tr><th>Phase</th><th>Licensing Scope</th><th>Est. Annual Licensing Cost</th></tr></thead>
-      <tbody>
-        <tr><td>Year 1</td><td>Home state license — individual 2-20, entity registration, E&O, 3–5 carrier appointments</td><td>$3,500 – $5,500 (E&O dominates)</td></tr>
-        <tr><td>Year 2</td><td>10–15 non-resident licenses in highest RBI-volume states; expanded carrier panel</td><td>$5,500 – $9,000</td></tr>
-        <tr><td>Year 3</td><td>Full 40-state coverage; complete specialty carrier panel; contingent commission programs</td><td>$9,000 – $14,000</td></tr>
-      </tbody>
-    </table>
-
-    <h2 class="sec">RESPA — Requires a Legal Opinion Before Launch</h2>
-    <div class="callout danger">
-      <strong>This is not a risk to dismiss.</strong> RESPA (Real Estate Settlement Procedures Act) prohibits kickbacks and unearned fees in federally related mortgage transactions when an affiliated entity receives a referral fee. Hard money loans on investment properties are generally <em>not</em> RESPA-covered (they are business-purpose loans, not consumer mortgages) — but this is not a determination to make without a qualified attorney. The exact loan types RBI originates, the structure of the inter-company referral arrangement, and state-specific anti-referral laws all affect the analysis. A legal opinion must be obtained before the brokerage accepts its first referral from RBI. This is a one-time cost, not ongoing — but it cannot be skipped.
-    </div>
-
-    <h2 class="sec">Key State Regulatory Requirements</h2>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">Broker Fee Caps</div>
-        <p>Most states cap retail broker fees per transaction — separate from commissions. Florida, for example, caps fees at <strong style="color:var(--text);">$35 per transaction</strong>. The brokerage cannot charge borrowers additional processing or advisory fees beyond what each state permits.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">Premium Trust Account</div>
-        <p>Required by law. Borrower premium payments <strong style="color:var(--text);">cannot comingle with operating funds</strong>. A dedicated bank account must be established from day one, with clean accounting maintained at all times.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">Mandatory Disclosure</div>
-        <p>All compensation to the brokerage — commissions, fees, contingent payments — must be disclosed to the borrower in writing. Failure to disclose is a regulatory violation, not just a best practice.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">Market Conduct Examinations</div>
-        <p>State insurance departments conduct periodic audits of licensed agencies — reviewing policy files, commission disclosures, trust account records, and CE compliance. Clean records from day one are required, not aspirational.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─────────── 04 COSTS ─────────── -->
-  <div id="costs" class="tab-panel">
-    <div class="section-title">What It Actually Costs</div>
-    <div class="section-intro">In dollars, in time, and in organizational attention. Most opportunity analyses focus on revenue. This section focuses on cost.</div>
-
-    <h2 class="sec">One-Time Startup Costs</h2>
-    <table class="data-table">
-      <thead><tr><th>Item</th><th>Low</th><th>High</th><th>Notes</th></tr></thead>
-      <tbody>
-        <tr><td>LLC formation (Articles of Organization + registered agent)</td><td>$125</td><td>$300</td><td>State filing fee; registered agent ~$100–150/yr ongoing</td></tr>
-        <tr><td>Operating agreement + legal review</td><td>$1,500</td><td>$3,000</td><td>Attorney-drafted; one-time</td></tr>
-        <tr><td>RESPA / affiliate structure legal opinion</td><td>$1,500</td><td>$3,500</td><td>Required before first referral — cannot be skipped</td></tr>
-        <tr><td>State DFS entity agency registration</td><td>$150</td><td>$250</td><td>Separate from LLC formation</td></tr>
-        <tr><td>2-20 licensing (course + exam + app + fingerprints)</td><td>$250</td><td>$450</td><td>Personal license for principal</td></tr>
-        <tr><td>E&amp;O insurance — Year 1</td><td>$2,500</td><td>$4,500</td><td>Non-negotiable; needed before first appointment</td></tr>
-        <tr><td>General liability insurance — Year 1</td><td>$900</td><td>$1,500</td><td>Standard business GL</td></tr>
-        <tr><td>AMS setup + first 3 months (EZLynx)</td><td>$600</td><td>$1,500</td><td>$200–400/mo; essential from day one</td></tr>
-        <tr><td>Comparative rater tool — first 3 months</td><td>$300</td><td>$600</td><td>Multi-carrier quoting; non-negotiable for efficiency</td></tr>
-        <tr><td>CRM / pipeline integration with RBI system</td><td>$0</td><td>$8,000</td><td>$0 if RBI tech team handles it; expensive if outsourced</td></tr>
-        <tr><td>Website / landing page</td><td>$500</td><td>$2,000</td><td>Minimal; under RBI brand</td></tr>
-        <tr><td>Carrier appointment fees (3–5 carriers)</td><td>$0</td><td>$500</td><td>Many carriers charge $0; some charge per appointment</td></tr>
-        <tr><td>Initial marketing materials</td><td>$500</td><td>$1,000</td><td>Borrower-facing one-pager + email templates</td></tr>
-        <tr><td style="font-weight:700;color:var(--text);">Total Startup Costs</td><td style="font-weight:700;color:var(--green);">$8,825</td><td style="font-weight:700;color:var(--gold);">$27,100</td><td>Low end assumes RBI provides tech + office space</td></tr>
-      </tbody>
-    </table>
-
-    <h2 class="sec">Monthly Operating Costs (Year 1)</h2>
-    <table class="data-table">
-      <thead><tr><th>Cost Item</th><th>Monthly (Low)</th><th>Monthly (High)</th><th>Notes</th></tr></thead>
-      <tbody>
-        <tr><td>Licensed broker / agent in charge salary</td><td>$6,500</td><td>$8,500</td><td>Full-time; holds the license; runs all operations in Year 1</td></tr>
-        <tr><td>CSR / policy processor (from Month 5–6)</td><td>$3,500</td><td>$4,500</td><td>Cannot skip indefinitely — operation bottlenecks without support staff</td></tr>
-        <tr><td>Compliance coordinator (part-time contractor)</td><td>$1,500</td><td>$2,500</td><td>Most skipped role; most costly to skip — see Team section</td></tr>
-        <tr><td>E&amp;O + GL insurance (amortized monthly)</td><td>$280</td><td>$500</td><td>Fixed annual cost; must be maintained continuously</td></tr>
-        <tr><td>AMS software</td><td>$150</td><td>$400</td><td>Per-user monthly; scales with team</td></tr>
-        <tr><td>Comparative rater tool</td><td>$100</td><td>$300</td><td>Non-negotiable for multi-carrier efficiency</td></tr>
-        <tr><td>Office space (if not provided by RBI)</td><td>$0</td><td>$1,500</td><td>$0 if RBI subsidizes; real cost if not</td></tr>
-        <tr><td>Miscellaneous (phone, bank, supplies)</td><td>$150</td><td>$400</td><td>Small but real</td></tr>
-        <tr><td style="font-weight:700;color:var(--text);">Total Monthly Opex (Year 1)</td><td style="font-weight:700;color:var(--green);">$12,180</td><td style="font-weight:700;color:var(--gold);">$18,600</td><td>Range depends heavily on RBI infrastructure support</td></tr>
-      </tbody>
-    </table>
-
-    <h2 class="sec">The Time Cost — Often Underestimated</h2>
-    <div class="card">
-      <div class="card-title">What "Running This" Actually Means</div>
-      <p>The 200-hour pre-licensing course is a real 200 hours. Exam prep on top of that is another 40–80 hours. Carrier appointments, AMS setup, pipeline integration, loan officer briefings, and processing the first wave of quotes is several hundred more hours before the operation runs smoothly. This is a full-time undertaking from the day the pipeline goes live — not a part-time effort. A brokerage run at half-attention will produce slow quotes, miss compliance deadlines, and lose borrowers — and the capture rate will reflect that.</p>
-      <p style="margin-top:12px;">The setup also benefits enormously from RBI's existing infrastructure. The tech team, the borrower relationships, the closing workflow, the office space — much of what a standalone brokerage would spend months building from scratch already exists inside RBI. That is a significant head start that most new brokerages simply don't have access to.</p>
-    </div>
-  </div>
-
-  <!-- ─────────── 05 GTM ─────────── -->
-  <div id="gtm" class="tab-panel">
-    <div class="section-title">Go-to-Market &amp; Execution</div>
-    <div class="section-intro">How this actually launches, what success looks like at each phase, and how the platform expands beyond RBI's own pipeline.</div>
-
-    <div class="phase p1">
-      <div class="phase-tag">Phase 1 · Months 1–6</div>
-      <div class="phase-title">Home State First — Internal Channel Activation</div>
-      <p>There is no external go-to-market in Phase 1. No advertising. No cold outreach. No external sales effort. The entire strategy is internal activation — getting RBI's own loan pipeline to systematically route insurance conversations to the brokerage at the moment of loan approval.</p>
-      <p style="margin-top:10px;">The sequence is fixed and sequential: obtain the license → form the LLC → secure E&O → appoint 3–5 carriers → configure the AMS → integrate with RBI's loan system → brief loan officers → process first quotes. Each step depends on the previous one. The realistic timeline from go-decision to first live quote is <strong style="color:var(--text);">90 days minimum</strong> — and that assumes no delays in licensing or carrier appointments, which should not be assumed.</p>
-      <p style="margin-top:10px;"><strong style="color:var(--text);">Success metric:</strong> What percentage of RBI's borrowers are placing insurance through the brokerage? Target: 40–50% within 6 months of going live. Tracking this number monthly lets the team optimize the workflow and identify where in the closing process quotes can be delivered even earlier.</p>
-    </div>
-
-    <div class="phase p2">
-      <div class="phase-tag">Phase 2 · Months 7–18</div>
-      <div class="phase-title">National Expansion — License the States, Unlock the Volume</div>
-      <p>Once the home state operation is stable, the next step is licensing in the states where RBI has the most loan volume. This is a purely administrative exercise — the same AMS, same workflow, same carriers. Just non-resident license filings in each state.</p>
-      <p style="margin-top:10px;">The right approach is to identify RBI's top states from actual loan data and file them simultaneously in one concerted push. Staggering state-by-state is inefficient. Each new state unlocked adds its share of RBI's loan volume to the addressable market with zero incremental infrastructure cost. The marginal cost of adding a new state is approximately $150–$300 in filing fees.</p>
-      <p style="margin-top:10px;"><strong style="color:var(--text);">Success metric:</strong> National policies as a growing % of total book. Each state unlocked directly expands the addressable market — RBI's 40+ state footprint is untapped commission revenue waiting to be activated.</p>
-    </div>
-
-    <div class="phase p3">
-      <div class="phase-tag">Phase 3 · Year 2–3</div>
-      <div class="phase-title">Platform Expansion — Other Hard Money Lenders</div>
-      <p>By Year 2–3, the brokerage will have built something valuable: a working pipeline integration, 20+ active state licenses, a trained AMS workflow, active specialty carrier appointments, and a track record with investment property insurers. That infrastructure has value beyond RBI's own borrowers.</p>
-      <p style="margin-top:10px;">There are hundreds of private lenders across the country doing 50–500 loans per month with the identical problem — their borrowers need insurance, outside brokers are capturing that revenue, and no one has built an embedded solution for them. RBI Insurance Brokerage can offer to become their insurance infrastructure: handle all policy placement for their borrowers, split the commission, and let the lender earn passive revenue with zero operational burden.</p>
-      <p style="margin-top:10px;">Each lender partnership adds volume without proportional cost increases. The fixed infrastructure — licensing, AMS, staffing — is already in place. This phase requires a dedicated outbound sales function, and should only be pursued once the RBI internal channel is operating cleanly. Selling a platform that isn't working yet is a credibility problem that is hard to recover from.</p>
-    </div>
-  </div>
-
-  <!-- ─────────── 06 COMPETITIVE LANDSCAPE ─────────── -->
-  <div id="competitive" class="tab-panel">
-    <div class="section-title">Competitive Landscape</div>
-    <div class="section-intro">Who the brokerage competes against, what the largest players in the hard money space are actually doing on insurance, and where the real advantage sits.</div>
-
-    <h2 class="sec">Competition for Individual Policy Placements</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">For any individual policy placement, the brokerage competes against whoever the borrower would have found on their own. In practice that means general retail insurance agents who may or may not specialize in investment property, and online comparison platforms like Policygenius or Insurify that are built primarily for owner-occupied residential and largely irrelevant for fix-and-flip and DSCR borrowers. The most capable competitors in the actual specialty investment property segment are brokerages like NREIG (National Real Estate Insurance Group) — a well-regarded specialist that serves real estate investors nationally and has strong carrier relationships. The critical difference: NREIG and every other specialist broker has to find and acquire their customers. RBI's brokerage has a captive pipeline of qualified buyers delivered to it automatically at the point of closing. That is not a marginal advantage. It is a structural one.</p>
-
-    <h2 class="sec">What the Large Hard Money Lenders Are Actually Doing</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">This section was researched directly. The findings are materially different from what is commonly assumed.</p>
-
-    <table class="data-table">
-      <thead><tr><th>Lender</th><th>Scale</th><th>Insurance Program?</th><th>What They Actually Do</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Kiavi</strong><br><span style="font-size:12px;color:var(--muted);">Formerly LendingHome</span></td>
-          <td>$23B+ funded<br>40+ states</td>
-          <td><span class="pill pill-gray">None</span></td>
-          <td>Borrowers source insurance independently. Kiavi partners with Azibo (a property management platform) which includes insurance referrals as a secondary feature — but this is an informal third-party referral, not an affiliated brokerage. No commission revenue captured.</td>
-        </tr>
-        <tr>
-          <td><strong>Lima One Capital</strong><br><span style="font-size:12px;color:var(--muted);">Backed by MFA Financial (NYSE: MFA)</span></td>
-          <td>$7B+ funded<br>All 50 states</td>
-          <td><span class="pill pill-gray">None</span></td>
-          <td>Requires proof of insurance to close — borrowers provide their own. Lima One maintains a general vendor network directory that includes insurance providers, but it is a passive referral list, not a proprietary program. No commission revenue captured.</td>
-        </tr>
-        <tr>
-          <td><strong>RCN Capital</strong><br><span style="font-size:12px;color:var(--muted);">Founded 2010, South Windsor CT</span></td>
-          <td>$2.5B+ funded<br>44 states</td>
-          <td><span class="pill pill-gray">None</span></td>
-          <td>Curated vendor network on their website lists insurance providers as a resource for borrowers. No affiliated brokerage, no carrier appointments, no commission structure. Borrowers handle insurance entirely on their own.</td>
-        </tr>
-        <tr>
-          <td><strong>OfferMarket</strong><br><span style="font-size:12px;color:var(--muted);">Integrated platform — lending + listings + insurance</span></td>
-          <td>Smaller regional player</td>
-          <td><span class="pill pill-green">Yes — active</span></td>
-          <td>The most direct comparable. OfferMarket explicitly markets an integrated platform combining hard money lending, a property marketplace, and in-house insurance solutions. They offer quotes directly to borrowers as part of the loan process and capture commission revenue. This is the model RBI is considering — and OfferMarket has already built it.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="callout warn">
-      <strong>The OfferMarket finding matters.</strong> They are a smaller, regional operator — not a national competitor at RBI's scale. But they prove the model works and that the regulatory and operational path is navigable. They are also actively marketing their integrated insurance capability as a competitive differentiator when recruiting borrowers. If the concept gains traction with larger lenders, the window for first-mover advantage at scale narrows.
-    </div>
-
-    <h2 class="sec">What the Real Moat Is — And What It Isn't</h2>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">The Real Moat</div>
-        <p>RBI's captive loan pipeline. The brokerage's structural advantage is not its insurance expertise, its carrier relationships, or its technology — all of which can be replicated. It is the guaranteed access to hundreds of qualified, time-pressured insurance buyers per month, delivered automatically at the moment of closing. That pipeline is unique to RBI. No outside competitor can access it without building their own equivalent lending operation. The position is genuinely defensible.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">What Isn't a Moat</div>
-        <p>The brokerage model itself has very low barriers to entry. Any licensed agent with E&O coverage and carrier appointments can launch one. The competitive edge comes from the distribution channel, not the insurance operation. This is actually a strength — it means the complexity and capital required to get started are minimal, and the value of the business scales with RBI's existing loan volume rather than requiring a standalone customer acquisition engine.</p>
-      </div>
-    </div>
-
-    <h2 class="sec">The Broader Signal</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.75;">The fact that Kiavi ($23B funded), Lima One ($7B funded), and RCN Capital ($2.5B+ funded) have all left insurance revenue on the table is notable — and somewhat surprising given the volume they process. It likely reflects organizational inertia more than a deliberate strategic decision. None of them appear to have studied the opportunity the way this memo does. That is the window. OfferMarket has validated the concept at small scale. No one has built it at RBI's scale. The question is whether RBI moves before a well-capitalized competitor decides it's worth doing.</p>
-  </div>
-
-  <!-- ─────────── 07 RISKS ─────────── -->
-  <div id="risks" class="tab-panel">
-    <div class="section-title">Risks &amp; Mitigants</div>
-    <div class="section-intro">Presented honestly. Some risks have strong mitigants. Others require accepting real uncertainty. The distinction matters.</div>
-
-    <div class="risk-row">
-      <div class="risk-icon">⚡</div>
-      <div>
-        <div class="risk-name">Borrower capture rate below potential</div>
-        <div class="risk-desc">If the brokerage quote isn't delivered seamlessly as part of the closing workflow, some borrowers will have already sourced their own coverage before seeing it. The earlier in the process the quote is presented, the higher the capture rate.</div>
-      </div>
-      <div class="risk-mitigant"><strong>Largely a technology design question.</strong> The tighter the integration — automated trigger at loan approval, quote as part of the standard closing checklist — the better the conversion. RBI already has the closing infrastructure and tech team that makes this achievable. The workflow design is the lever.</div>
-    </div>
-
-    <div class="risk-row">
-      <div class="risk-icon">📋</div>
-      <div>
-        <div class="risk-name">Most borrowers already have insurance at closing</div>
-        <div class="risk-desc">If 40–50% of RBI's borrowers arrive at closing with existing coverage from their own agents, the addressable market is significantly smaller than assumed. The financial case weakens materially.</div>
-      </div>
-      <div class="risk-mitigant"><strong>Unknown today — must be confirmed.</strong> Mitigation is limited once established — the brokerage can compete on price and speed for renewals, but cannot force a borrower to switch carriers mid-loan. Confirming this percentage from RBI's closing data is a prerequisite for accurate financial modeling.</div>
-    </div>
-
-    <div class="risk-row">
-      <div class="risk-icon">🌀</div>
-      <div>
-        <div class="risk-name">Regional insurance market volatility</div>
-        <div class="risk-desc">In high-risk states, carriers exit or raise rates dramatically with little notice. The 2021–2023 cycle saw multiple admitted carriers leave certain markets entirely, leaving borrowers stranded and brokers scrambling for alternatives.</div>
-      </div>
-      <div class="risk-mitigant"><strong>Real but manageable.</strong> Mitigant: maintain a multi-carrier panel (5+ carriers) so a single exit does not halt operations. The surplus lines market — Lloyd's, Scottsdale via Burns &amp; Wilcox — historically remains available even when admitted carriers pull back. Carrier diversification is the primary hedge.</div>
-    </div>
-
-    <div class="risk-row">
-      <div class="risk-icon">⚖️</div>
-      <div>
-        <div class="risk-name">RESPA or state regulations create a structural barrier</div>
-        <div class="risk-desc">The legal structure of the referral relationship between RBI and the brokerage may require a specific setup that limits how commissions flow, or may trigger disclosure requirements that affect borrower trust.</div>
-      </div>
-      <div class="risk-mitigant"><strong>Requires legal opinion before launch — period.</strong> Mitigant: obtain an attorney review of the structure before spending money on setup. If the structure needs to be redesigned, better to know before committing. This is a one-time cost that prevents a potentially deal-breaking regulatory problem later.</div>
-    </div>
-
-    <div class="risk-row">
-      <div class="risk-icon">👤</div>
-      <div>
-        <div class="risk-name">Key-person dependency — single licensed operator</div>
-        <div class="risk-desc">In Year 1, the brokerage depends entirely on its licensed agent in charge. If that person leaves, is unavailable, or is incapacitated, the entity cannot legally operate until a new licensed agent is appointed — a process that takes weeks.</div>
-      </div>
-      <div class="risk-mitigant"><strong>Real operational fragility.</strong> Mitigant: as soon as volume justifies it, hire a second licensed producer or cross-train a CSR to hold a 4-40 CSR license (allows transactions under principal supervision). This should be a Year 2 priority, not an afterthought.</div>
-    </div>
-
-    <div class="risk-row">
-      <div class="risk-icon">🏢</div>
-      <div>
-        <div class="risk-name">Carrier access is limited in Year 1</div>
-        <div class="risk-desc">A brand new brokerage with no premium volume history cannot get direct appointments with most specialty carriers. For the first 6–12 months, almost all business flows through a wholesale broker like Burns & Wilcox — who takes a 3–5% spread off the commission. This is real margin compression at the exact moment the business is trying to get off the ground.</div>
-      </div>
-      <div class="risk-mitigant"><strong>Expected and manageable — but don't underestimate it.</strong> Burns & Wilcox provides day-one access to 50+ carriers including Lloyd's syndicates. Net commission of 8–12% in Year 1 is still meaningful revenue. A few carriers (Neptune Flood, Foremost) will appoint new agencies with low or no volume minimums — those can be direct from the start. The path to full 12–15% margins is earned through volume, not time. The faster the pipeline integration, the faster that threshold is hit.</div>
-    </div>
-
-    <div class="risk-row">
-      <div class="risk-icon">📂</div>
-      <div>
-        <div class="risk-name">Multi-state compliance is harder than it looks</div>
-        <div class="risk-desc">40+ states means 40+ license renewal dates, 40+ continuing education requirements, 40+ sets of rules that change independently, and some states with surplus lines requirements on top. A lapsed license in a high-volume state means zero legal ability to place policies there until reinstated. Trust account violations can trigger suspension. This isn't a one-time setup — it's a permanent operational function that compounds in complexity as the brokerage scales nationally.</div>
-      </div>
-      <div class="risk-mitigant"><strong>Requires dedicated ownership from day one.</strong> An AMS with built-in compliance tracking handles renewal dates and CE deadlines automatically. The compliance coordinator role is the most commonly skipped hire — and the most costly to skip. States like California, New York, and Texas have their own licensing paths that need specific attention. Budget for this properly and it's manageable. Ignore it and it becomes the most likely source of a serious operational problem.</div>
-    </div>
-  </div>
-
-  <!-- ─────────── 08 TEAM ─────────── -->
-  <div id="team" class="tab-panel">
-    <div class="section-title">Team &amp; Operations</div>
-    <div class="section-intro">The roles this business requires, when they need to be in place, and what happens operationally if any are missing.</div>
-
-    <h2 class="sec">Required Roles — With Honest Consequences</h2>
-    <table class="data-table">
-      <thead><tr><th>Role</th><th>When</th><th>Annual Cost</th><th>What Happens Without This Role</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Licensed Broker / Agent in Charge</strong><br><span style="font-size:12px;color:var(--muted);">2-20 holder; entity principal</span></td>
-          <td><span class="pill pill-red">Day 1</span></td>
-          <td>$80K–$100K</td>
-          <td>The brokerage cannot legally operate. No policies can be quoted or bound without a licensed agent in charge. This is not optional.</td>
-        </tr>
-        <tr>
-          <td><strong>CSR / Policy Processor</strong><br><span style="font-size:12px;color:var(--muted);">Quote processing, binding, certificates</span></td>
-          <td><span class="pill pill-gold">Month 4–6</span></td>
-          <td>$45K–$55K</td>
-          <td>The brokerage gets bottlenecked on transactional work. Quote turnaround slows, borrowers use other brokers, and the capture rate falls — directly suppressing revenue.</td>
-        </tr>
-        <tr>
-          <td><strong>Compliance Coordinator</strong><br><span style="font-size:12px;color:var(--muted);">Part-time contractor; multi-state tracking</span></td>
-          <td><span class="pill pill-red">Month 1</span></td>
-          <td>$24K–$30K</td>
-          <td>License renewals get missed. CE deadlines pass. Carrier appointments lapse. The brokerage faces fines, forced policy cancellations, and potential suspension in multiple states. The most frequently skipped role — and the most costly mistake.</td>
-        </tr>
-        <tr>
-          <td><strong>National Sales Rep</strong><br><span style="font-size:12px;color:var(--muted);">Lender partnership outreach — Phase 3</span></td>
-          <td><span class="pill pill-blue">Year 2–3</span></td>
-          <td>$60K–$75K + incentive</td>
-          <td>No platform expansion. The brokerage remains permanently tied to RBI's single pipeline with no revenue diversification.</td>
-        </tr>
-        <tr>
-          <td><strong>RBI Tech Team Support</strong><br><span style="font-size:12px;color:var(--muted);">Pipeline integration build + maintenance</span></td>
-          <td><span class="pill pill-red">Day 1</span></td>
-          <td>Shared / internal</td>
-          <td>No systematic integration. Loan officers route manually and inconsistently. Capture rate stays low. The structural advantage over outside brokers never materializes.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h2 class="sec">What the Brokerage Operation Looks Like Day-to-Day</h2>
-    <div class="card">
-      <div class="card-title">A Full-Time Operation From Day One</div>
-      <p>In Year 1 the brokerage is lean but fully active. On any given day: processing incoming quote requests from RBI's loan pipeline, running multi-carrier comparisons in the AMS, communicating with borrowers to bind coverage, issuing certificates of insurance naming RBI as loss payee, managing carrier relationships and appointment renewals, and tracking compliance deadlines across active state licenses.</p>
-      <p style="margin-top:10px;">Hard money loans close fast — sometimes with 24–48 hours of final notice. If a borrower needs insurance bound by tomorrow and the brokerage is unresponsive, the loan gets delayed or the borrower finds another broker. Speed and availability are core to the value proposition and need to be built into the operation from day one.</p>
-    </div>
-
-    <h2 class="sec">RBI's Built-In Advantages</h2>
-    <div class="callout success">
-      Most insurance brokerages spend their first 1–2 years doing nothing but building the things RBI already has: a steady flow of qualified customers, a trusted brand, an operational closing infrastructure, a technology team, and office space. The brokerage plugs directly into all of it. The pipeline integration — connecting the loan approval trigger to the brokerage quote workflow — is the one technical piece that needs to be built. Given RBI already has title and inspection services integrated into the same pipeline, this is a solved problem operationally. The template exists.
-    </div>
-  </div>
-
-  <!-- ─────────── 09 FINANCIALS ─────────── -->
-  <div id="financials" class="tab-panel">
-    <div class="section-title">Financial Projections</div>
-    <div class="section-intro">Intentionally left as a placeholder. The model will be built once key inputs are confirmed with RBI management.</div>
-
-    <div class="placeholder-box">
-      <div class="ph-icon">📊</div>
-      <h3>Financial Model — To Be Completed</h3>
-      <p>Building accurate projections before confirming the inputs below would produce misleading numbers. The financial model will be built as a separate deliverable once these data points are confirmed directly with RBI.</p>
-      <ul class="input-list">
-        <li>Current monthly loan closings (actual run rate, not 2-year average)</li>
-        <li>State-by-state loan volume breakdown — highest concentration states</li>
-        <li>Average loan size on recent deals (drives insured value + premium)</li>
-        <li>% of borrowers who already carry insurance at closing</li>
-        <li>Loan type mix — fix &amp; flip vs. DSCR vs. bridge vs. construction</li>
-        <li>Average loan term length (affects renewal duration assumptions)</li>
-        <li>Whether RBI subsidizes office space, tech, and CRM infrastructure</li>
-        <li>Agreed compensation structure for the brokerage operator (salary vs. equity)</li>
-      </ul>
-    </div>
-
-    <div class="callout" style="margin-top:24px;">
-      <strong>What the model will show:</strong> 3-year revenue by stream (new policies, renewals, flood, contingent commissions), full cost structure by year, monthly burn rate, breakeven analysis (policies/month needed to cover opex), capture rate sensitivity analysis showing revenue at 20%, 40%, 60%, and 80% conversion, and a startup cash requirement summary.
-    </div>
-  </div>
-
-  <!-- ─────────── 10 QUESTIONS & BOTTOM LINE ─────────── -->
-  <div id="decision" class="tab-panel">
-    <div class="section-title">Questions &amp; Bottom Line</div>
-    <div class="section-intro">The inputs needed to build the financial model, and the honest conclusion once they're answered.</div>
-
-    <h2 class="sec">Questions to Answer First</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.75;">These inputs materially shape the financial projections and help size the opportunity accurately. The more of these that can be confirmed, the more precise the financial model.</p>
-
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 0;margin-bottom:32px;">
-
-      <div class="flag-item" style="padding:18px 24px;">
-        <div style="min-width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:2px;">1</div>
-        <div class="flag-text">
-          <strong>How many loans are you closing per month right now?</strong><br>
-          <span style="font-size:13px;color:var(--muted);">Need the current run rate, not the 2-year average. Loan volume is the single biggest variable in the entire revenue model.</span>
-        </div>
-      </div>
-
-      <div class="flag-item" style="padding:18px 24px;">
-        <div style="min-width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:2px;">2</div>
-        <div class="flag-text">
-          <strong>What's the state breakdown — roughly what % is in which states? Top 5 states?</strong><br>
-          <span style="font-size:13px;color:var(--muted);">Higher-premium states generate 2–3x more commission per policy than lower-premium ones. Geographic concentration is one of the biggest variables in the revenue model.</span>
-        </div>
-      </div>
-
-      <div class="flag-item" style="padding:18px 24px;">
-        <div style="min-width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:2px;">3</div>
-        <div class="flag-text">
-          <strong>What's the average loan size across the full book — not just the recent deals on the website?</strong><br>
-          <span style="font-size:13px;color:var(--muted);">Average loan size drives the insured property value, which drives the premium, which drives the commission per policy. This is the single most important number for the revenue model.</span>
-        </div>
-      </div>
-
-      <div class="flag-item" style="padding:18px 24px;">
-        <div style="min-width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:2px;">4</div>
-        <div class="flag-text">
-          <strong>When borrowers come to closing, do they usually already have insurance sorted — or are they scrambling last minute?</strong><br>
-          <span style="font-size:13px;color:var(--muted);">This defines the addressable market. If most already have coverage through their own agent, the capturable pool is smaller. If most are scrambling, the conversion case is much stronger.</span>
-        </div>
-      </div>
-
-      <div class="flag-item" style="padding:18px 24px;">
-        <div style="min-width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:2px;">5</div>
-        <div class="flag-text">
-          <strong>What's the loan type mix — mostly fix &amp; flip, or a significant amount of DSCR/rental too?</strong><br>
-          <span style="font-size:13px;color:var(--muted);">Fix &amp; flip requires builder's risk / vacant dwelling coverage. DSCR/rental requires DP-3 landlord policies. The mix determines which carrier relationships and products to prioritize from day one.</span>
-        </div>
-      </div>
-
-      <div class="flag-item" style="padding:18px 24px;border-bottom:none;">
-        <div style="min-width:28px;height:28px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:2px;">6</div>
-        <div class="flag-text">
-          <strong>Does RBI currently have any informal referral arrangement with an insurance broker or carrier?</strong><br>
-          <span style="font-size:13px;color:var(--muted);">If a relationship already exists — even informally — it needs to be understood before building anything. An existing arrangement may need to be unwound or may carry obligations that affect the structure.</span>
-        </div>
-      </div>
-
-      <div class="flag-item" style="padding:18px 24px;border-bottom:none;border-top:1px solid var(--border);">
-        <div style="min-width:28px;height:28px;background:rgba(255,76,76,0.15);border:1px solid var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--red);flex-shrink:0;margin-top:2px;">7</div>
-        <div class="flag-text">
-          <strong>What % of your loan book is DSCR/rental vs. bridge, fix &amp; flip, and new construction?</strong><br>
-          <span style="font-size:13px;color:var(--muted);">This is the renewal rate question. Bridge, fix &amp; flip, and new construction loans are short-term — the property sells or refinances before the policy renews, so there is no renewal commission. DSCR/rental loans renew every year passively. The higher the DSCR/rental %, the stronger the long-term compounding. This number materially changes the 5-year revenue model.</span>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="divider"></div>
-
-    <h2 class="sec">The Bottom Line</h2>
-
-    <div class="callout success">
-      RBI already has everything that makes this opportunity viable — the loan volume, the borrower relationships, the brand, the closing infrastructure, and the proven playbook from title and inspection. The insurance brokerage is the next natural iteration of vertical integration. New policy commissions alone — earned at every closing — generate meaningful revenue without any renewal dependency. For DSCR and rental loans, those commissions also recur annually. The startup cost is minimal. No competitor at RBI's scale has built this yet. OfferMarket has proven the model works at smaller scale — the window at the top is still open.<br><br>
-      The considerations worth keeping in mind: compliance is a real ongoing function that needs dedicated ownership from day one, the revenue ramp takes a few months to kick in, and the legal structure of the affiliate relationship needs a one-time attorney review before launch. None of these are barriers — they're just the real costs of doing it right.<br><br>
-      <strong>The opportunity is real. The question is simply when to start.</strong>
-    </div>
-  </div>
-
-</div><!-- end tabs-wrapper -->
-
-<footer>
-  <span>RBI Insurance Brokerage LLC — Opportunity Assessment &amp; Decision Memo</span>
-  <span>April 2026 · Confidential</span>
-</footer>
+<!-- ── MAIN ── -->
+<div class="main" id="main"></div>
 
 <script>
-  function showTab(id) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    event.target.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+// ─── Data ─────────────────────────────────────────────────────────────────
+// [tier, state, abbr, indFee, agFee, proc, warn, note, defaultVol]
+const STATES = [
+  ["1h","Florida","FL",142,200,"8–12 wks",false,"HOME STATE · 200hr course + FL state exam + FL DFS application + agency LLC registration. Fingerprints required.",40],
+  ["1","Texas","TX",50,50,"2–4 wks",false,"Top 3 RBI state · Both licenses via NIPR Day 1 after FL · No exam · Full reciprocity",20],
+  ["1","Pennsylvania","PA",55,55,"2–4 wks",false,"Top 3 RBI state · Both licenses via NIPR Day 1 after FL · No exam · Full reciprocity",10],
+  ["1","New York","NY",40,200,"4–12 wks",true,"⚠️ Does NOT use NIPR · File directly with NY DFS · Agency requires separate broker license · Allow 4–12 weeks",null],
+  ["1","California","CA",188,188,"4–10 wks",true,"⚠️ Slower processing · May need state supplement + fingerprints · Confirm CA DOI before filing",null],
+  ["2","Georgia","GA",100,100,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","North Carolina","NC",50,50,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Virginia","VA",15,15,"1–3 wks",false,"Both via NIPR · No exam · Very low fee · Fast",null],
+  ["2","New Jersey","NJ",150,150,"3–5 wks",false,"Both via NIPR · NJ reviews individually — not automatic",null],
+  ["2","Maryland","MD",54,54,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Illinois","IL",215,215,"2–4 wks",false,"Both via NIPR · No exam · Higher fee",null],
+  ["2","Ohio","OH",15,15,"1–3 wks",false,"Both via NIPR · No exam · Very low fee",null],
+  ["2","Michigan","MI",10,10,"1–3 wks",false,"Both via NIPR · No exam · Lowest fee",null],
+  ["2","Indiana","IN",40,40,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Tennessee","TN",50,50,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Missouri","MO",100,100,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Arizona","AZ",120,120,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Colorado","CO",82,82,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Washington","WA",60,60,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Connecticut","CT",140,140,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","South Carolina","SC",25,25,"1–3 wks",false,"Both via NIPR · No exam · Very low fee",null],
+  ["2","Louisiana","LA",75,75,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Massachusetts","MA",225,225,"3–5 wks",false,"Both via NIPR · Highest fee + $75 P&C surcharge",null],
+  ["2","Alabama","AL",80,80,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Alaska","AK",75,75,"3–5 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Arkansas","AR",20,20,"2–4 wks",false,"Both via NIPR · No exam · Very low fee",null],
+  ["2","Delaware","DE",100,100,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","DC","DC",70,70,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Idaho","ID",80,80,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Iowa","IA",50,50,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Kansas","KS",30,30,"2–4 wks",false,"Both via NIPR · No exam · Very low fee",null],
+  ["2","Kentucky","KY",40,50,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Maine","ME",50,50,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Mississippi","MS",100,100,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Montana","MT",50,50,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Nebraska","NE",50,50,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","New Hampshire","NH",100,100,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","New Mexico","NM",30,30,"2–4 wks",false,"Both via NIPR · No exam · Very low fee",null],
+  ["2","North Dakota","ND",100,100,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Oklahoma","OK",60,60,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Rhode Island","RI",130,130,"3–5 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","West Virginia","WV",25,25,"2–4 wks",false,"Both via NIPR · No exam · Very low fee",null],
+  ["2","Wisconsin","WI",75,75,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+  ["2","Wyoming","WY",100,100,"2–4 wks",false,"Both via NIPR · No exam · Reciprocal",null],
+];
+
+const COMING_SOON = [
+  ["Hawaii","HI",50,50,"3–6 wks",true,"⚠️ Partial reciprocity — verify HI DOI before filing"],
+  ["Minnesota","MN",50,50,"2–4 wks",false,"Both via NIPR once RBI goes live"],
+  ["Nevada","NV",195,195,"2–4 wks",false,"Higher fee · Both via NIPR"],
+  ["Oregon","OR",75,75,"2–4 wks",false,"Both via NIPR"],
+  ["South Dakota","SD",25,25,"2–4 wks",false,"Very low fee · Both via NIPR"],
+  ["Utah","UT",75,75,"2–4 wks",false,"Both via NIPR"],
+  ["Vermont","VT",50,50,"2–4 wks",false,"Both via NIPR"],
+];
+
+// ─── Storage ──────────────────────────────────────────────────────────────
+const gk = (abbr,t) => `rbi_${abbr}_${t}`;
+const gs = (abbr,t) => parseInt(localStorage.getItem(gk(abbr,t))||0);
+const ss = (abbr,t,v) => { localStorage.setItem(gk(abbr,t),v); refresh(abbr); updateStats(); };
+const gv = abbr => localStorage.getItem(`rbi_vol_${abbr}`)||'';
+const sv = (abbr,v) => localStorage.setItem(`rbi_vol_${abbr}`,v);
+
+// ─── Status labels ────────────────────────────────────────────────────────
+const SLBLS = ['Not Started','Applied','Approved','Live'];
+const SCLS  = ['s0','s1','s2','s3'];
+
+// ─── Build ────────────────────────────────────────────────────────────────
+function build() {
+  const main = document.getElementById('main');
+
+  // Tier 1
+  main.appendChild(makeSection('t1','Tier 1 — Priority States','#F5C542',
+    STATES.filter(s=>s[0]==='1h'||s[0]==='1')));
+
+  // Tier 2
+  main.appendChild(makeSection('t2','All Other States','#3B7BFF',
+    STATES.filter(s=>s[0]==='2')));
+
+  // Coming soon
+  main.appendChild(makeComingSoon());
+
+  updateStats();
+}
+
+function makeSection(id, title, color, data) {
+  const wrap = document.createElement('div');
+  wrap.className = 'section';
+  wrap.dataset.section = id;
+
+  wrap.innerHTML = `
+    <div class="sec-hdr" onclick="toggleSec('${id}')">
+      <div class="tier-dot" style="background:${color}"></div>
+      <div class="sec-title">${title}</div>
+      <div class="sec-count">${data.length} states</div>
+      <div class="sec-chevron open" id="chev-${id}">▶</div>
+    </div>
+    <div class="sec-body" id="body-${id}" style="max-height:9999px;">
+      <table class="tbl">
+        <thead><tr>
+          <th style="min-width:140px;">State</th>
+          <th style="min-width:52px;text-align:right">% Vol</th>
+          <th style="min-width:180px;">Individual License — Alan</th>
+          <th style="min-width:180px;">Agency Entity License — LLC</th>
+          <th style="min-width:80px;text-align:center">Ready?</th>
+          <th style="min-width:70px;text-align:right">Fees</th>
+          <th style="min-width:70px;">Time</th>
+          <th>Notes</th>
+        </tr></thead>
+        <tbody id="tbody-${id}"></tbody>
+      </table>
+    </div>`;
+
+  const tbody = wrap.querySelector(`#tbody-${id}`);
+  data.forEach(s => tbody.appendChild(makeRow(s)));
+  return wrap;
+}
+
+function makeRow(s) {
+  const [tier,name,abbr,indFee,agFee,proc,warn,note,defVol] = s;
+  const tr = document.createElement('tr');
+  tr.id = `row-${abbr}`;
+  tr.dataset.tier = tier;
+  tr.dataset.name = name.toLowerCase();
+  tr.dataset.abbr = abbr.toLowerCase();
+  tr.dataset.warn = warn;
+
+  const procCls = proc.includes('4–12')||proc.includes('4–10') ? 'slow' : proc.includes('3–') ? 'med' : 'fast';
+  const vol = gv(abbr) || (defVol ? defVol+'%' : '');
+
+  tr.innerHTML = `
+    <td>
+      <div class="state-cell">
+        ${warn ? '<div class="warn-dot"></div>' : ''}
+        <div class="abbr-tag">${abbr}</div>
+        <div class="state-fullname">${name}</div>
+      </div>
+    </td>
+    <td class="vol-cell">
+      <input class="vol-inp" value="${vol}" placeholder="—" title="% of RBI volume"
+        oninput="sv('${abbr}',this.value)">
+    </td>
+    <td><div class="sts-wrap" id="ind-${abbr}"></div></td>
+    <td><div class="sts-wrap" id="ag-${abbr}"></div></td>
+    <td style="text-align:center"><div class="rdy no" id="rdy-${abbr}">—</div></td>
+    <td class="fee-cell">$${(indFee+agFee).toLocaleString()}</td>
+    <td class="proc-cell ${procCls}">${proc}</td>
+    <td class="note-cell${warn?' warn':''}">${note}</td>
+  `;
+
+  renderToggles(abbr);
+  return tr;
+}
+
+function renderToggles(abbr) {
+  ['ind','ag'].forEach(type => {
+    const wrap = document.getElementById(`${type}-${abbr}`);
+    if (!wrap) return;
+    const cur = gs(abbr,type);
+    wrap.innerHTML = SLBLS.map((lbl,i) => {
+      const active = i===cur;
+      return `<div class="sts-pill ${SCLS[i]}${active?'':' inactive'}"
+        onclick="ss('${abbr}','${type}',${i})">${lbl}</div>`;
+    }).join('');
+  });
+}
+
+function refresh(abbr) {
+  renderToggles(abbr);
+  const ind = gs(abbr,'ind');
+  const ag  = gs(abbr,'ag');
+  const rdy = document.getElementById(`rdy-${abbr}`);
+  if (!rdy) return;
+  const row = document.getElementById(`row-${abbr}`);
+  if (ind===3 && ag===3) {
+    rdy.textContent='✅ Live'; rdy.className='rdy live';
+    if(row) row.style.background='rgba(34,200,122,0.04)';
+  } else if (ind>0||ag>0) {
+    rdy.textContent='🔄'; rdy.className='rdy prog';
+    if(row) row.style.background='';
+  } else {
+    rdy.textContent='—'; rdy.className='rdy no';
+    if(row) row.style.background='';
   }
+}
+
+function makeComingSoon() {
+  const wrap = document.createElement('div');
+  wrap.className = 'coming-soon-section';
+  wrap.innerHTML = `
+    <div class="cs-hdr" onclick="toggleCS()">
+      <div class="cs-badge">Coming Soon</div>
+      <div class="cs-title">RBI Not Yet Operating in These States (${COMING_SOON.length})</div>
+      <div style="margin-left:auto;font-size:12px;color:var(--muted);" id="cs-chev">▶</div>
+    </div>
+    <div id="cs-body" style="display:none;">
+      <div class="cs-body">
+        <div class="cs-grid">${COMING_SOON.map(([name,abbr,indFee,agFee,proc,warn,note])=>`
+          <div class="cs-chip">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div class="abbr-tag" style="font-size:10px;">${abbr}</div>
+              <div class="cs-abbr">${name}</div>
+            </div>
+            <div class="cs-meta">$${(indFee+agFee).toLocaleString()} · ${proc}</div>
+            ${warn?`<div class="cs-warn">⚠️ Partial reciprocity</div>`:''}
+          </div>`).join('')}
+        </div>
+        <div style="font-size:10px;color:var(--muted);padding:12px 0 0;font-style:italic;">
+          File individual + agency entity licenses via NIPR when RBI goes live in these states. Monitor rbiprivatelending.com.
+        </div>
+      </div>
+    </div>`;
+  return wrap;
+}
+
+// ─── Stats ────────────────────────────────────────────────────────────────
+function updateStats() {
+  let indLive=0, agLive=0, rdy=0;
+  const n = STATES.length;
+  STATES.forEach(([,,abbr]) => {
+    const i=gs(abbr,'ind'), a=gs(abbr,'ag');
+    if(i===3) indLive++;
+    if(a===3) agLive++;
+    if(i===3&&a===3) rdy++;
+  });
+  document.getElementById('k-ind').textContent = indLive;
+  document.getElementById('k-ag').textContent  = agLive;
+  document.getElementById('k-rdy').textContent = rdy;
+
+  const setPB=(id,pId,v)=>{
+    const p=Math.round(v/n*100);
+    document.getElementById(id).style.width=p+'%';
+    document.getElementById(pId).textContent=p+'%';
+  };
+  setPB('pb-ind','pct-ind',indLive);
+  setPB('pb-ag','pct-ag',agLive);
+  setPB('pb-rdy','pct-rdy',rdy);
+}
+
+// ─── Filters ──────────────────────────────────────────────────────────────
+let curF='all';
+function setF(btn) {
+  document.querySelectorAll('.ftag').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  curF = btn.dataset.f;
+  applyFilter();
+}
+
+function doSearch(val) {
+  const q=val.toLowerCase().trim();
+  document.querySelectorAll('.tbl tbody tr').forEach(tr=>{
+    const match=!q||tr.dataset.name.includes(q)||tr.dataset.abbr.includes(q);
+    tr.classList.toggle('hidden',!match);
+  });
+}
+
+function applyFilter() {
+  document.querySelectorAll('.tbl tbody tr').forEach(tr => {
+    const abbr = tr.id.replace('row-','');
+    const tier = tr.dataset.tier;
+    const warn = tr.dataset.warn==='true';
+    const ind  = gs(abbr,'ind'), ag = gs(abbr,'ag');
+    const isLive = ind===3&&ag===3;
+    const isProg = (ind>0||ag>0)&&!isLive;
+    const isTier1 = tier==='1h'||tier==='1';
+
+    let show=true;
+    if(curF==='t1')   show=isTier1;
+    else if(curF==='t2')   show=tier==='2';
+    else if(curF==='warn') show=warn;
+    else if(curF==='live') show=isLive;
+    else if(curF==='prog') show=isProg;
+    tr.classList.toggle('hidden',!show);
+  });
+
+  // Hide empty section bodies
+  document.querySelectorAll('.section').forEach(sec=>{
+    const visible=sec.querySelectorAll('tbody tr:not(.hidden)').length>0;
+    sec.style.display=visible?'':'none';
+  });
+}
+
+// ─── Toggles ──────────────────────────────────────────────────────────────
+function toggleSec(id) {
+  const body=document.getElementById(`body-${id}`);
+  const chev=document.getElementById(`chev-${id}`);
+  const open=body.style.maxHeight!=='0px';
+  body.style.maxHeight=open?'0px':'9999px';
+  chev.classList.toggle('open',!open);
+}
+function toggleCS() {
+  const b=document.getElementById('cs-body');
+  const c=document.getElementById('cs-chev');
+  const open=b.style.display!=='none';
+  b.style.display=open?'none':'block';
+  c.textContent=open?'▶':'▼';
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────
+build();
+STATES.forEach(([,,abbr])=>refresh(abbr));
 </script>
 </body>
 </html>
